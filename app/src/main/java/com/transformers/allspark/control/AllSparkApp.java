@@ -16,8 +16,10 @@ public class AllSparkApp extends Application implements TransformersAPI.ApiReady
     @Override
     public void onCreate() {
         super.onCreate();
-        api = new TransformersAPI(this);
+    }
 
+    public void init(){
+        api = new TransformersAPI(this);
     }
 
     public TransformersAPI getTransformersAPI(){
@@ -26,6 +28,6 @@ public class AllSparkApp extends Application implements TransformersAPI.ApiReady
 
     @Override
     public void onReady() {
-
+        transformers = api.getAllTransformers();
     }
 }

@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 
 import com.transformers.allspark.model.Transformer;
 import com.transformers.allspark.model.TransformerRequest;
+import com.transformers.allspark.model.Transformers;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,8 +43,8 @@ public class TransformersAPI {
      * Gets a list of the Transformers created using the POST API.
      * @return A maximum list of 50 Transformers starting from the oldest created Transformer.
      */
-    public List<Transformer> getAllTransformers(){
-        ArrayList<Transformer> results = new ArrayList<>();
+    public Transformers getAllTransformers(){
+        Transformers results = new Transformers();
 
         return results;
     }
