@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- The list of all possible Autobots names -->
+    <string-array name="Autobots">
+        <item>Afterburner</item>
+        <item>Air Raid</item>
+        <item>Beachcomber</item>
+        <item>Blades</item>
+        <item>Blaster</item>
+        <item>Bluestreak</item>
+        <item>Blurr</item>
+        <item>Brainstorm</item>
+        <item>Brawn</item>
+        <item>Broadside</item>
+        <item>Bumblebee</item>
+        <item>Chase</item>
+        <item>Chromedome</item>
+        <item>Cliffjumper</item>
+        <item>Cloudraker</item>
+        <item>Computron</item>
+        <item>Cosmos</item>
+        <item>Crosshairs</item>
+        <item>Defensor</item>
+        <item>Doublecross</item>
+        <item>Eject</item>
+        <item>Fastlane</item>
+        <item>Fireflight</item>
+        <item>First Aid</item>
+        <item>Fortress Maximus</item>
+        <item>Freeway</item>
+        <item>Gears</item>
+        <item>Goldbug</item>
+        <item>Grapple</item>
+        <item>Grimlock</item>
+        <item>Groove</item>
+        <item>Grotusque</item>
+        <item>Hardhead</item>
+        <item>Highbrow</item>
+        <item>Hoist</item>
+        <item>Hot Rod</item>
+        <item>Hot Spot</item>
+        <item>Hound</item>
+        <item>Hubcap</item>
+        <item>Huffer</item>
+        <item>Inferno</item>
+        <item>Ironhide</item>
+        <item>Jazz</item>
+        <item>Jetfire</item>
+        <item>Kup</item>
+        <item>Lightspeed</item>
+        <item>Metroplex</item>
+        <item>Mirage</item>
+        <item>Nosecone</item>
+        <item>Omega Supreme</item>
+        <item>Optimus Prime</item>
+        <item>Outback</item>
+        <item>Perceptor</item>
+        <item>Pipes</item>
+        <item>Pointblank</item>
+        <item>Powerglide</item>
+        <item>Prowl</item>
+        <item>Punch</item>
+        <item>Ramhorn</item>
+        <item>Ratchet</item>
+        <item>Red Alert</item>
+        <item>Repugnus</item>
+        <item>Rewind</item>
+        <item>Roadbuster</item>
+        <item>Rodimus Prime</item>
+        <item>Rollbar</item>
+        <item>Sandstorm</item>
+        <item>Scattershot</item>
+        <item>Searchlight</item>
+        <item>Seaspray</item>
+        <item>Sideswipe</item>
+        <item>Silverbolt</item>
+        <item>Siren</item>
+        <item>Skids</item>
+        <item>Skydive</item>
+        <item>Sky Lynx</item>
+        <item>Slag</item>
+        <item>Slingshot</item>
+        <item>Sludge</item>
+        <item>Smokescreen</item>
+        <item>Snarl</item>
+        <item>Springer</item>
+        <item>Steeljaw</item>
+        <item>Strafe</item>
+        <item>Streetwise</item>
+        <item>Sunstreaker</item>
+        <item>Superion</item>
+        <item>Sureshot</item>
+        <item>Swerve</item>
+        <item>Swoop</item>
+        <item>Tailgate</item>
+        <item>Topspin</item>
+        <item>Tracks</item>
+        <item>Trailbreaker</item>
+        <item>Twin Twist</item>
+        <item>Ultra Magnus</item>
+        <item>Warpath</item>
+        <item>Wheelie</item>
+        <item>Wheeljack</item>
+        <item>Whirl</item>
+        <item>Wideload</item>
+        <item>Windcharger</item>
+        <item>Wreck-Gar</item>
+    </string-array>
+
+    <!-- The list of all possible Decepticons names -->
+    <string-array name="Decepticons">
+        <item>Abominus</item>
+        <item>Apeface</item>
+        <item>Astrotrain</item>
+        <item>Barrage</item>
+        <item>Battletrap</item>
+        <item>Blast Off</item>
+        <item>Blitzwing</item>
+        <item>Blot</item>
+        <item>Bombshell</item>
+        <item>Bonecrusher</item>
+        <item>Brawl</item>
+        <item>Breakdown</item>
+        <item>Bruticus</item>
+        <item>Buzzsaw</item>
+        <item>Chop Shop</item>
+        <item>Counterpunch</item>
+        <item>Cutthroat</item>
+        <item>Cyclonus</item>
+        <item>Dead End</item>
+        <item>Devastator</item>
+        <item>Dirge</item>
+        <item>Divebomb</item>
+        <item>Drag Strip</item>
+        <item>Fangry</item>
+        <item>Flywheels</item>
+        <item>Frenzy</item>
+        <item>Galvatron</item>
+        <item>Gnaw</item>
+        <item>Headstrong</item>
+        <item>Hook</item>
+        <item>Hun-Grrr</item>
+        <item>Kickback</item>
+        <item>Laserbeak</item>
+        <item>Long Haul</item>
+        <item>Megatron</item>
+        <item>Menasor</item>
+        <item>Mindwipe</item>
+        <item>Misfire</item>
+        <item>Mixmaster</item>
+        <item>Motormaster</item>
+        <item>Octane</item>
+        <item>Onslaught</item>
+        <item>Overkill</item>
+        <item>Pounce</item>
+        <item>Predaking</item>
+        <item>Ramjet</item>
+        <item>Rampage</item>
+        <item>Ransack</item>
+        <item>Ratbat</item>
+        <item>Ravage</item>
+        <item>Razorclaw</item>
+        <item>Reflector</item>
+        <item>Rippersnapper</item>
+        <item>Rumble</item>
+        <item>Runabout</item>
+        <item>Runamuck</item>
+        <item>Scavenger</item>
+        <item>Scorponok</item>
+        <item>Scourge</item>
+        <item>Scrapper</item>
+        <item>Shockwave</item>
+        <item>Shrapnel</item>
+        <item>Sinnertwin</item>
+        <item>Sixshot</item>
+        <item>Skullcruncher</item>
+        <item>Skywarp</item>
+        <item>Slugfest</item>
+        <item>Slugslinger</item>
+        <item>Snapdragon</item>
+        <item>Soundwave</item>
+        <item>Starscream</item>
+        <item>Swindle</item>
+        <item>Tantrum</item>
+        <item>Thrust</item>
+        <item>Thundercracker</item>
+        <item>Triggerhappy</item>
+        <item>Trypticon</item>
+        <item>Venom</item>
+        <item>Vortex</item>
+        <item>Weirdwolf</item>
+        <item>Wildrider</item>
+        <item>Wingspan</item>
+    </string-array>
+</resources>
