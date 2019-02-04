@@ -1,15 +1,13 @@
 package com.transformers.allspark.activity;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
-import android.view.Window;
 
 import com.transformers.allspark.R;
 import com.transformers.allspark.control.AllSparkApp;
-import com.transformers.allspark.model.Transformers;
 
 /**
  * Loading activity.
@@ -33,8 +31,14 @@ public class StartActivity extends AppCompatActivity implements AllSparkApp.Load
         app.init(this);
     }
 
+    private void goToMainActivity(){
+        Log.d(TAG, "Starting main activity.");
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+    }
+
     @Override
-    public void onLoadFinished(Transformers transformers) {
+    public void onLoadFinished() {
         Log.d(TAG, "On api load finished");
         long endTime = System.currentTimeMillis();
         long diff = endTime - startTime;
@@ -56,11 +60,5 @@ public class StartActivity extends AppCompatActivity implements AllSparkApp.Load
         } else {
             goToMainActivity();
         }
-    }
-
-    private void goToMainActivity(){
-        Log.d(TAG, "Starting main activity.");
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
     }
 }

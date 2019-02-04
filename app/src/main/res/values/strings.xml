@@ -3,4 +3,5 @@
     <string name="title_home">Transformers</string>
     <string name="title_create">Create</string>
     <string name="title_battle">Battle</string>
+    <string name="lbl_no_transformers">You have no Transformers.\nPlease create some.</string>
 </resources>

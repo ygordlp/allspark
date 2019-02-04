@@ -8,10 +8,12 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.transformers.allspark.R;
+import com.transformers.allspark.fragment.BattleFragment;
+import com.transformers.allspark.fragment.CreateFragment;
+import com.transformers.allspark.fragment.TransformersFragment;
 
 public class MainActivity extends AppCompatActivity {
 
-    private TextView mTextMessage;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -19,14 +21,20 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
-                case R.id.navigation_home:
-                    mTextMessage.setText(R.string.title_home);
+                case R.id.navigation_transformers:
+                    getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.container, new TransformersFragment())
+                            .commitNow();
                     return true;
                 case R.id.navigation_create:
-                    mTextMessage.setText(R.string.title_create);
+                    getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.container, new CreateFragment())
+                            .commitNow();
                     return true;
                 case R.id.navigation_battle:
-                    mTextMessage.setText(R.string.title_battle);
+                    getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.container, new BattleFragment())
+                            .commitNow();
                     return true;
             }
             return false;
@@ -38,7 +46,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mTextMessage = (TextView) findViewById(R.id.message);
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.container, new TransformersFragment())
+                .commitNow();
+
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
     }

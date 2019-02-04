@@ -43,10 +43,10 @@ public class TransformersAPI {
      * Gets a list of the Transformers created using the POST API.
      * @return A maximum list of 50 Transformers starting from the oldest created Transformer.
      */
-    public Transformers getAllTransformers(){
-        Transformers results = new Transformers();
+    public List<Transformer> getAllTransformers(){
+        //TODO: Get data
 
-        return results;
+        return new ArrayList<>();
     }
 
     /**

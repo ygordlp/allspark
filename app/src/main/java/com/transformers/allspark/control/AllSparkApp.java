@@ -5,7 +5,11 @@ import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.transformers.allspark.model.Transformer;
 import com.transformers.allspark.model.Transformers;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Application class.
@@ -16,12 +20,11 @@ public class AllSparkApp extends Application implements TransformersAPI.ApiReady
     private static final String TAG = "AllSparkApp";
 
     public interface LoaderListener {
-        void onLoadFinished(Transformers transformers);
+        void onLoadFinished();
     }
 
     private LoaderListener listener;
     private TransformersAPI api;
-    private Transformers transformers;
 
     @Override
     public void onCreate() {
@@ -32,7 +35,8 @@ public class AllSparkApp extends Application implements TransformersAPI.ApiReady
     public void init(@NonNull LoaderListener listener) {
         this.listener = listener;
         Log.d(TAG, "Starting API.");
-        api = new TransformersAPI(this);
+        //api = new TransformersAPI(this);
+        api = new SampleDataAPI(this);
     }
 
     public TransformersAPI getTransformersAPI(){
@@ -42,27 +46,8 @@ public class AllSparkApp extends Application implements TransformersAPI.ApiReady
     @Override
     public void onReady() {
         Log.d(TAG, "API ready");
-        transformers = api.getAllTransformers();
-        new LoadTransformersTask().execute();
+        listener.onLoadFinished();
     }
 
-    /**
-     * Async task to request API Token.
-     */
-    public class LoadTransformersTask extends AsyncTask<Void, Void, Transformers> {
 
-        @Override
-        protected Transformers doInBackground(Void... params) {
-            Log.d(TAG, "Loading transformers");
-            transformers = api.getAllTransformers();
-
-            return  transformers;
-        }
-
-        @Override
-        protected void onPostExecute(Transformers result) {
-            Log.d(TAG, "Transformers loaded");
-            listener.onLoadFinished(result);
-        }
-    }
 }

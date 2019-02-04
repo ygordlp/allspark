@@ -32,7 +32,7 @@ public class AllSpark {
      *
      * @return A Transformer.
      */
-    public Transformer randomGenerate() {
+    public Transformer randomGenerate(String team) {
         Transformer transformer = new Transformer();
 
         return transformer;
