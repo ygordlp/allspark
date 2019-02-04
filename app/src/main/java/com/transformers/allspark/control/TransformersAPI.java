@@ -1,5 +1,6 @@
 package com.transformers.allspark.control;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 
@@ -17,6 +18,7 @@ public class TransformersAPI {
 
     public interface ApiReadyListener {
         void onReady();
+        Context getContext();
     }
 
     private ApiReadyListener listener;

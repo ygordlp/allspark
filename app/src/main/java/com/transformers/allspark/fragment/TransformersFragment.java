@@ -4,6 +4,7 @@ package com.transformers.allspark.fragment;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -11,6 +12,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.transformers.allspark.R;
 import com.transformers.allspark.adapter.TransformersRecyclerViewAdapter;
@@ -19,6 +22,7 @@ import com.transformers.allspark.control.AllSparkApp;
 import com.transformers.allspark.control.TransformersAPI;
 import com.transformers.allspark.model.Transformer;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -29,6 +33,8 @@ public class TransformersFragment extends Fragment implements OnItemSelectedList
     private static final String TAG = "TransformersFragment";
     private TransformersRecyclerViewAdapter adapter;
     private RecyclerView recyclerView;
+    private ProgressBar progressBar;
+    private TextView message;
     private TransformersAPI api;
 
     public TransformersFragment() {
@@ -42,24 +48,40 @@ public class TransformersFragment extends Fragment implements OnItemSelectedList
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_transformers, container, false);
 
-        // Set the adapter
-        if (view instanceof RecyclerView) {
-            Context context = view.getContext();
-            recyclerView = (RecyclerView) view;
-            recyclerView.setLayoutManager(new LinearLayoutManager(context));
+        recyclerView = view.findViewById(R.id.list);
+        progressBar = view.findViewById(R.id.listLoading);
+        message = view.findViewById(R.id.txtNoTransformers);
 
-            AllSparkApp app = (AllSparkApp) getActivity().getApplication();
-            adapter = new TransformersRecyclerViewAdapter(this);
-            recyclerView.setAdapter(adapter);
-            api = app.getTransformersAPI();
-        }
+        adapter = new TransformersRecyclerViewAdapter(this);
+        recyclerView.setAdapter(adapter);
+
+        AllSparkApp app = (AllSparkApp) getActivity().getApplication();
+        api = app.getTransformersAPI();
+
+
+        recyclerView.setVisibility(View.INVISIBLE);
+        recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
+        progressBar.setVisibility(View.VISIBLE);
+        message.setVisibility(View.INVISIBLE);
+
+        new LoadTransformersTask().execute();
 
         return view;
     }
 
-    public void onTransformersLoaded(List<Transformer> transformers){
+    public void onTransformersLoaded(@NonNull List<Transformer> transformers){
         adapter.setTransformers(transformers);
         adapter.notifyDataSetChanged();
+
+        progressBar.setVisibility(View.INVISIBLE);
+        if(transformers.isEmpty()){
+            Log.d(TAG, "No transformers found");
+            message.setVisibility(View.VISIBLE);
+        } else {
+            Log.d(TAG, transformers.size() + " transformers found");
+            recyclerView.setVisibility(View.VISIBLE);
+        }
+
     }
 
     @Override
@@ -81,8 +103,11 @@ public class TransformersFragment extends Fragment implements OnItemSelectedList
         }
 
         @Override
-        protected void onPostExecute(List<Transformer>  result) {
+        protected void onPostExecute(List<Transformer> result) {
             Log.d(TAG, "Transformers loaded");
+            if(result == null){
+                result = new ArrayList<>();
+            }
             onTransformersLoaded(result);
         }
     }

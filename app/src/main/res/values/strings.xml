@@ -4,4 +4,27 @@
     <string name="title_create">Create</string>
     <string name="title_battle">Battle</string>
     <string name="lbl_no_transformers">You have no Transformers.\nPlease create some.</string>
+    <string name="lbl_team_icon">Team Icon</string>
+
+    <string name="lbl_strength">Strength</string>
+    <string name="lbl_intelligence">Intelligence</string>
+    <string name="lbl_speed">Speed</string>
+    <string name="lbl_endurance">Endurance</string>
+    <string name="lbl_rank">Rank</string>
+    <string name="lbl_courage">Courage</string>
+    <string name="lbl_firepower">Firepower</string>
+    <string name="lbl_skill">Skill</string>
+
+    <string name="lbl_strength_short">S</string>
+    <string name="lbl_intelligence_short">I</string>
+    <string name="lbl_speed_short">S</string>
+    <string name="lbl_endurance_short">E</string>
+    <string name="lbl_rank_short">R</string>
+    <string name="lbl_courage_short">C</string>
+    <string name="lbl_firepower_short">F</string>
+    <string name="lbl_skill_short">S</string>
+    <string name="lbl_value_not_set">0</string>
+    <string name="lbl_name">Name:</string>
+    <string name="lbl_string_not_set">NOT SET</string>
+
 </resources>

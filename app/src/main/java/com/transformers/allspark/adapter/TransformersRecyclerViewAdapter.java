@@ -5,6 +5,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.transformers.allspark.R;
 import com.transformers.allspark.model.Transformer;
@@ -51,12 +54,27 @@ public class TransformersRecyclerViewAdapter extends RecyclerView.Adapter<Transf
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        public final View mView;
         public Transformer transformer;
+        public TextView txtStrength;
+        public TextView txtIntelligence;
+        public TextView txtSpeed;
+        public TextView txtEndurance;
+        public TextView txtRank;
+        public TextView txtCourage;
+        public TextView txtFirepower;
+        public TextView txtSkill;
+        public ImageButton btnInfo;
+        public ImageView imgTeamIcon;
 
         public ViewHolder(View view) {
             super(view);
-            mView = view;
+            txtStrength = view.findViewById(R.id.txtStrength);
+            txtIntelligence = view.findViewById(R.id.txtIntelligence);
+            txtSpeed = view.findViewById(R.id.txtSpeed);
+            txtEndurance = view.findViewById(R.id.txtEndurance);
+            txtRank = view.findViewById(R.id.txtRank);
+            txtCourage = view.findViewById(R.id.txtCourage);
+            txtFirepower = view.findViewById(R.id.txtFirepower);
         }
 
         @Override

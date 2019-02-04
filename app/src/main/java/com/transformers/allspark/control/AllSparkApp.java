@@ -1,6 +1,7 @@
 package com.transformers.allspark.control;
 
 import android.app.Application;
+import android.content.Context;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.util.Log;
@@ -49,5 +50,9 @@ public class AllSparkApp extends Application implements TransformersAPI.ApiReady
         listener.onLoadFinished();
     }
 
+    @Override
+    public Context getContext() {
+        return getApplicationContext();
+    }
 
 }

@@ -5,6 +5,9 @@ package com.transformers.allspark.model;
  */
 public class Transformer {
 
+    public static final String TEAM_AUTOBOTS = "A";
+    public static final String TEAM_DECEPTICONS = "D";
+
     /** Default value for strings with invalid data. */
     private static final String NOT_SET = "NOT SET";
 
@@ -76,13 +79,17 @@ public class Transformer {
      * @param name A valid non-empty string.
      */
     public void setName(String name) {
-        this.name = name;
+        if(name == null || name.isEmpty()){
+            this.name = NOT_SET;
+        } else {
+            this.name = name;
+        }
     }
 
     /**
      * Gets Transformer's team.
-     * A - Autobot.
-     * B - Decepticon.
+     * A - Autobot. Transformer.TEAM_AUTOBOTS
+     * B - Decepticon. Transformer.TEAM_DECEPTICONS
      *
      * @return Transformer's team, either “A” or “D” (Autobot or Decepticon).
      */
@@ -92,12 +99,14 @@ public class Transformer {
 
     /**
      * Sets Transformer's team, either “A” or “D” (Autobot or Decepticon).
-     * Default value A.
+     * A - Autobot. Transformer.TEAM_AUTOBOTS
+     * B - Decepticon. Transformer.TEAM_DECEPTICONS
+     * Default value Transformer.TEAM_AUTOBOTS.
      * @param team Transformer's team.
      */
     public void setTeam(String team) {
         if(team == null || team.isEmpty() || (!team.equals("A") && !team.equals("D"))){
-            this.team = "A";
+            this.team = TEAM_AUTOBOTS;
         } else {
             this.team = team;
         }
