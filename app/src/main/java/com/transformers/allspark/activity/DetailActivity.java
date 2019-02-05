@@ -17,7 +17,7 @@ import com.transformers.allspark.model.Transformer;
 public class DetailActivity extends AppCompatActivity implements View.OnClickListener {
 
     public static final String TRANSFORMER_ID = "TRANSFORMER_ID";
-    public static final String EDIT_MODE = "EDIT_MODE";
+    public static final String NEW_TRANSFORMER = "NEW_TRANSFORMER";
     private static final String TAG = "DetailActivity";
 
     private TransformersAPI api;
@@ -53,7 +53,7 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
         String id = bundle.getString(TRANSFORMER_ID);
         transformer = api.getTransformer(id);
 
-        boolean isEditMode = bundle.getBoolean(EDIT_MODE);
+        boolean isNew = bundle.getBoolean(NEW_TRANSFORMER);
 
         btnEdit = findViewById(R.id.btnEdit);
         btnOk = findViewById(R.id.btnOk);
@@ -63,7 +63,7 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
         btnDelete.setOnClickListener(this);
         btnOk.setOnClickListener(this);
 
-        if (!isEditMode) {
+        if (isNew) {
             btnEdit.setVisibility(View.GONE);
             btnDelete.setVisibility(View.GONE);
         }

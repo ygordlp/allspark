@@ -13,9 +13,6 @@ import java.util.Random;
  */
 public class AllSpark {
 
-    public static final String AUTOBOTS_BOSS = "Optimus Prime";
-    public static final String DECEPTICONS_BOSS = "Predaking";
-
     private Random random = new Random();
 
     private String[] autobotsNames;

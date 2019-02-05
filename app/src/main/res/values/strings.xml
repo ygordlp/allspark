@@ -32,5 +32,6 @@
     <string name="lbl_ok">OK</string>
     <string name="lbl_delete">Delete</string>
     <string name="lbl_transformer_image">Transformer Image</string>
+    <string name="lbl_allspark_explained">The AllSpark will randomly generate a transformer.\nSelect the team a see what you get.</string>
 
 </resources>

@@ -91,10 +91,9 @@ public class TransformersFragment extends Fragment implements OnItemSelectedList
 
     @Override
     public void onItemSelected(Transformer item) {
-        Log.d(TAG, "Item selected");
         Intent intent = new Intent(getActivity(), DetailActivity.class);
         intent.putExtra(DetailActivity.TRANSFORMER_ID, item.getId());
-        intent.putExtra(DetailActivity.EDIT_MODE, true);
+        intent.putExtra(DetailActivity.NEW_TRANSFORMER, false);
 
         startActivity(intent);
     }
