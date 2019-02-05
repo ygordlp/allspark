@@ -54,7 +54,6 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
         }
         AllSparkApp app = (AllSparkApp) getApplication();
         api = app.getTransformersAPI();
-        api.addDataSetChangeListener(this);
         allSpark = app.getAllSpark();
 
         String id = bundle.getString(TRANSFORMER_ID);
@@ -88,6 +87,18 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
         txtSkill = findViewById(R.id.txtSkill);
 
         updateUI();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        api.addDataSetChangeListener(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        api.removeDataSetChangeListener(this);
     }
 
     private void updateUI() {
@@ -163,6 +174,7 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void deleteConfirmed() {
+        api.removeDataSetChangeListener(this);
         if (api.deleteTransformer(transformer)) {
             Toast toast = Toast.makeText(this, R.string.lbl_delete_success, Toast.LENGTH_SHORT);
             toast.getView().setBackgroundResource(R.color.positive);

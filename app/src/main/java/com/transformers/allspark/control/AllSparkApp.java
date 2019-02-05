@@ -1,11 +1,15 @@
 package com.transformers.allspark.control;
 
 import android.app.Application;
+import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.transformers.allspark.R;
+import com.transformers.allspark.model.Transformer;
 import com.transformers.allspark.util.AllSpark;
+
+import java.util.List;
 
 /**
  * Application class.
@@ -65,8 +69,30 @@ public class AllSparkApp extends Application {
      */
     public void onApiReady() {
         Log.d(TAG, "API ready");
+        new LoadTransformersTask().execute();
+    }
+
+    private void onTransformersLoaded(){
         listener.onLoadFinished();
     }
 
+    /**
+     * Async task to request API Token.
+     */
+    public class LoadTransformersTask extends AsyncTask<Void, Void, List<Transformer> > {
+
+        @Override
+        protected List<Transformer> doInBackground(Void... params) {
+            Log.d(TAG, "Loading transformers");
+            api.loadTransformers();
+            return  api.getAllTransformers();
+        }
+
+        @Override
+        protected void onPostExecute(List<Transformer> result) {
+            Log.d(TAG, "Transformers loaded");
+            onTransformersLoaded();
+        }
+    }
 
 }

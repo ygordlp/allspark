@@ -9,6 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.transformers.allspark.R;
+import com.transformers.allspark.control.AllSparkApp;
+import com.transformers.allspark.control.Battle;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -16,6 +18,7 @@ import com.transformers.allspark.R;
 public class BattleFragment extends Fragment {
 
 
+    private Battle battle;
 
     public BattleFragment() {
         // Required empty public constructor
@@ -27,6 +30,8 @@ public class BattleFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_battle, container, false);
 
+        AllSparkApp app = (AllSparkApp) getActivity().getApplication();
+        //api = app.getTransformersAPI();
 
         return view;
     }

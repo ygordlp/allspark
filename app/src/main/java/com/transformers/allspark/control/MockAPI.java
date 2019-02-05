@@ -13,7 +13,6 @@ import java.util.List;
  */
 public class MockAPI extends TransformersAPI {
 
-    List<Transformer> transformers;
     AllSpark allSpark;
 
     /**
@@ -24,7 +23,12 @@ public class MockAPI extends TransformersAPI {
     public MockAPI(@NonNull AllSparkApp allSparkApp) {
         super(allSparkApp);
         allSpark = allSparkApp.getAllSpark();
+    }
+
+    @Override
+    public void loadTransformers() {
         generateRandomTransformers();
+        notifyDataSetListeners();
     }
 
     /**

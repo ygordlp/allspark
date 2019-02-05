@@ -20,7 +20,8 @@ public class TransformersAPI {
     private static final String AUTOBOTS_FOLDER = "file:///android_asset/Autobots/";
     private static final String DECEPTICONS_FOLDER = "file:///android_asset/Decepticons/";
 
-    private AllSparkApp allSparkApp;
+    protected AllSparkApp allSparkApp;
+    protected List<Transformer> transformers = new ArrayList<>();
     private String token = null;
     private List<DataSetChangeListener> listeners = new ArrayList<>();
     private SharedPreferences sharedPreferences;
@@ -57,10 +58,18 @@ public class TransformersAPI {
 
     /**
      * Adds a listener to be notified when data is changed
-     * @param listener DataSetChangeListener
+     * @param listener DataSetChangeListener to be added.
      */
     public void addDataSetChangeListener(DataSetChangeListener listener){
         listeners.add(listener);
+    }
+
+    /**
+     * Removes a listener
+     * @param listener DataSetChangeListener to be removed.
+     */
+    public void removeDataSetChangeListener(DataSetChangeListener listener){
+        listeners.remove(listener);
     }
 
     /**
@@ -73,13 +82,20 @@ public class TransformersAPI {
     }
 
     /**
-     * Gets a list of the Transformers created using the POST API.
+     * Loads and cache all save Transformers from database.
+     */
+    public void loadTransformers(){
+        notifyDataSetListeners();
+    }
+
+    /**
+     * Gets a list of all loaded transformers Transformers created using the POST API.
      *
      * @return A maximum list of 50 Transformers starting from the oldest created Transformer.
      */
     public List<Transformer> getAllTransformers() {
         //TODO: Get data
-        return new ArrayList<>();
+        return transformers;
     }
 
     /**

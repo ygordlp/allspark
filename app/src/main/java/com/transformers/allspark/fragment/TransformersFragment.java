@@ -56,38 +56,18 @@ public class TransformersFragment extends Fragment implements OnItemSelectedList
         adapter = new TransformersRecyclerViewAdapter(this);
         recyclerView.setAdapter(adapter);
 
-        try {
-            AllSparkApp app = (AllSparkApp) getActivity().getApplication();
-            api = app.getTransformersAPI();
-            api.addDataSetChangeListener(this);
-        } catch (NullPointerException e) {
-            Log.e(TAG, "Null application.");
-        }
-
+        AllSparkApp app = (AllSparkApp) getActivity().getApplication();
+        api = app.getTransformersAPI();
+        api.addDataSetChangeListener(this);
 
         recyclerView.setVisibility(View.INVISIBLE);
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
         progressBar.setVisibility(View.VISIBLE);
         message.setVisibility(View.INVISIBLE);
 
-        new LoadTransformersTask().execute();
+        onDataSetChanged();
 
         return view;
-    }
-
-    public void onTransformersLoaded(@NonNull List<Transformer> transformers){
-        adapter.setTransformers(transformers);
-        adapter.notifyDataSetChanged();
-
-        progressBar.setVisibility(View.INVISIBLE);
-        if(transformers.isEmpty()){
-            Log.d(TAG, "No transformers found");
-            message.setVisibility(View.VISIBLE);
-        } else {
-            Log.d(TAG, transformers.size() + " transformers found");
-            recyclerView.setVisibility(View.VISIBLE);
-        }
-
     }
 
     @Override
@@ -101,28 +81,17 @@ public class TransformersFragment extends Fragment implements OnItemSelectedList
 
     @Override
     public void onDataSetChanged() {
-        new LoadTransformersTask().execute();
-    }
+        List<Transformer> transformers = api.getAllTransformers();
+        adapter.setTransformers(transformers);
+        adapter.notifyDataSetChanged();
 
-    /**
-     * Async task to request API Token.
-     */
-    public class LoadTransformersTask extends AsyncTask<Void, Void, List<Transformer> > {
-
-        @Override
-        protected List<Transformer> doInBackground(Void... params) {
-            Log.d(TAG, "Loading transformers");
-            return  api.getAllTransformers();
-        }
-
-        @Override
-        protected void onPostExecute(List<Transformer> result) {
-            Log.d(TAG, "Transformers loaded");
-            if(result == null){
-                result = new ArrayList<>();
-            }
-            onTransformersLoaded(result);
+        progressBar.setVisibility(View.INVISIBLE);
+        if(transformers.isEmpty()){
+            Log.d(TAG, "No transformers found");
+            message.setVisibility(View.VISIBLE);
+        } else {
+            Log.d(TAG, transformers.size() + " transformers found");
+            recyclerView.setVisibility(View.VISIBLE);
         }
     }
-
 }
