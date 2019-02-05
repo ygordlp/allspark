@@ -59,14 +59,13 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
         btnOk = findViewById(R.id.btnOk);
         btnDelete = findViewById(R.id.btnDelete);
 
-        if (isEditMode) {
-            btnOk.setVisibility(View.GONE);
-            btnEdit.setOnClickListener(this);
-            btnDelete.setOnClickListener(this);
-        } else {
+        btnEdit.setOnClickListener(this);
+        btnDelete.setOnClickListener(this);
+        btnOk.setOnClickListener(this);
+
+        if (!isEditMode) {
             btnEdit.setVisibility(View.GONE);
             btnDelete.setVisibility(View.GONE);
-            btnOk.setOnClickListener(this);
         }
 
         imgTransformer = findViewById(R.id.imgTransformer);
@@ -105,7 +104,6 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
         Log.d(TAG, "Loading image: " + imagePath);
         Picasso.get()
                 .load(imagePath)
-                .placeholder(R.drawable.card_placeholder)
                 .error(R.drawable.card_placeholder)
                 .into(imgTransformer);
     }

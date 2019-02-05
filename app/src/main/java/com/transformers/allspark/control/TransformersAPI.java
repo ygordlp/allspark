@@ -97,11 +97,12 @@ public class TransformersAPI {
         String result = null;
         if (transformer != null && transformer.getName() != null &&
                 transformer.getTeam() != null) {
+            String name = transformer.getName().replace(" ", "_");
 
             if (transformer.getTeam().equals(Transformer.TEAM_DECEPTICONS)) {
-                result = DECEPTICONS_FOLDER + transformer.getName() + ".jpg";
+                result = DECEPTICONS_FOLDER + name + ".jpg";
             } else {
-                result = AUTOBOTS_FOLDER + transformer.getName() + ".jpg";
+                result = AUTOBOTS_FOLDER + name + ".jpg";
             }
         }
 
