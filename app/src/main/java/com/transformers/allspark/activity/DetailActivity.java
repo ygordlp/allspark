@@ -1,26 +1,31 @@
 package com.transformers.allspark.activity;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 import com.transformers.allspark.R;
 import com.transformers.allspark.control.AllSparkApp;
 import com.transformers.allspark.control.TransformersAPI;
 import com.transformers.allspark.model.Transformer;
+import com.transformers.allspark.util.AllSpark;
 
-public class DetailActivity extends AppCompatActivity implements View.OnClickListener {
+public class DetailActivity extends AppCompatActivity implements View.OnClickListener, TransformersAPI.DataSetChangeListener {
 
     public static final String TRANSFORMER_ID = "TRANSFORMER_ID";
     public static final String NEW_TRANSFORMER = "NEW_TRANSFORMER";
     private static final String TAG = "DetailActivity";
 
     private TransformersAPI api;
+    private AllSpark allSpark;
     private Button btnEdit;
     private Button btnOk;
     private Button btnDelete;
@@ -49,6 +54,8 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
         }
         AllSparkApp app = (AllSparkApp) getApplication();
         api = app.getTransformersAPI();
+        api.addDataSetChangeListener(this);
+        allSpark = app.getAllSpark();
 
         String id = bundle.getString(TRANSFORMER_ID);
         transformer = api.getTransformer(id);
@@ -123,11 +130,71 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
         }
     }
 
-    public void showEditDialog() {
-
+    private void showEditDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(R.string.lbl_confirm_edit)
+                .setPositiveButton(R.string.lbl_yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        editConfirmed();
+                    }
+                })
+                .setNegativeButton(R.string.lbl_no, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialogCanceled();
+                    }
+                });
+        builder.create().show();
     }
 
-    public void showDeleteDialog() {
+    private void showDeleteDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(R.string.lbl_confirm_delete)
+                .setPositiveButton(R.string.lbl_yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        deleteConfirmed();
+                    }
+                })
+                .setNegativeButton(R.string.lbl_no, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialogCanceled();
+                    }
+                });
+        builder.create().show();
+    }
 
+    private void deleteConfirmed() {
+        if (api.deleteTransformer(transformer)) {
+            Toast toast = Toast.makeText(this, R.string.lbl_delete_success, Toast.LENGTH_SHORT);
+            toast.getView().setBackgroundResource(R.color.positive);
+            toast.show();
+        } else {
+            Toast toast = Toast.makeText(this, R.string.lbl_delete_fail, Toast.LENGTH_LONG);
+            toast.getView().setBackgroundResource(R.color.negative);
+            toast.show();
+        }
+
+        finish();
+    }
+
+    private void editConfirmed() {
+        allSpark.setRandomSpec(transformer);
+        if (api.editTransformer(transformer)) {
+            Toast toast = Toast.makeText(this, R.string.lbl_edit_success, Toast.LENGTH_SHORT);
+            toast.getView().setBackgroundResource(R.color.positive);
+            toast.show();
+        } else {
+            Toast toast = Toast.makeText(this, R.string.lbl_edit_fail, Toast.LENGTH_LONG);
+            toast.getView().setBackgroundResource(R.color.negative);
+            toast.show();
+        }
+    }
+
+    private void dialogCanceled() {
+        Log.d(TAG, "Dialog canceled");
+    }
+
+    @Override
+    public void onDataSetChanged() {
+        updateUI();
     }
 }

@@ -49,6 +49,18 @@ public class AllSpark {
         Transformer transformer = new Transformer();
         transformer.setTeam(team);
         transformer.setName(getRandomName(transformer.getTeam()));
+        setRandomSpec(transformer);
+
+        return transformer;
+    }
+
+    /**
+     * Sets Transformer specs randomly.
+     * Name and team will not be changed.
+     *
+     * @param transformer Transformer to be set.
+     */
+    public void setRandomSpec(Transformer transformer){
         transformer.setStrength(randomValue(1, 10));
         transformer.setIntelligence(randomValue(1, 10));
         transformer.setSpeed(randomValue(1, 10));
@@ -57,9 +69,6 @@ public class AllSpark {
         transformer.setCourage(randomValue(1, 10));
         transformer.setFirepower(randomValue(1, 10));
         transformer.setSkill(randomValue(1, 10));
-
-
-        return transformer;
     }
 
     /**

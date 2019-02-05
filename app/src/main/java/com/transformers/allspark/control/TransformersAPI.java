@@ -1,5 +1,7 @@
 package com.transformers.allspark.control;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 
@@ -13,11 +15,19 @@ import java.util.List;
  */
 public class TransformersAPI {
 
+    private static final String SHARED_PREFERENCES = "com.transformers.allspark.SHARED_PREFERENCES";
+    private static final String SAVED_TOKEN = "SAVED_TOKEN";
     private static final String AUTOBOTS_FOLDER = "file:///android_asset/Autobots/";
     private static final String DECEPTICONS_FOLDER = "file:///android_asset/Decepticons/";
 
     private AllSparkApp allSparkApp;
     private String token = null;
+    private List<DataSetChangeListener> listeners = new ArrayList<>();
+    private SharedPreferences sharedPreferences;
+
+    public interface DataSetChangeListener {
+        void onDataSetChanged();
+    }
 
     /**
      * TransformersAPI that contains all API interface to
@@ -26,6 +36,7 @@ public class TransformersAPI {
      */
     public TransformersAPI(@NonNull AllSparkApp allSparkApp) {
         this.allSparkApp = allSparkApp;
+        this.sharedPreferences = allSparkApp.getSharedPreferences(SHARED_PREFERENCES, Context.MODE_PRIVATE);
         init();
     }
 
@@ -33,8 +44,32 @@ public class TransformersAPI {
      * Initialize API.
      */
     private void init() {
-        TokenTask tokenTask = new TokenTask();
-        tokenTask.execute();
+        String savedToken = sharedPreferences.getString(SAVED_TOKEN, null);
+        if(savedToken == null){
+            TokenTask tokenTask = new TokenTask();
+            tokenTask.execute();
+        } else {
+            token = savedToken;
+            allSparkApp.onApiReady();
+        }
+
+    }
+
+    /**
+     * Adds a listener to be notified when data is changed
+     * @param listener DataSetChangeListener
+     */
+    public void addDataSetChangeListener(DataSetChangeListener listener){
+        listeners.add(listener);
+    }
+
+    /**
+     * Notify all listeners.
+      */
+    protected void notifyDataSetListeners(){
+        for(DataSetChangeListener listener : listeners){
+            listener.onDataSetChanged();
+        }
     }
 
     /**
@@ -44,7 +79,6 @@ public class TransformersAPI {
      */
     public List<Transformer> getAllTransformers() {
         //TODO: Get data
-
         return new ArrayList<>();
     }
 
@@ -55,6 +89,18 @@ public class TransformersAPI {
      * @return True if added with success.
      */
     public boolean addTransformer(Transformer transformer) {
+
+        notifyDataSetListeners();
+        return false;
+    }
+
+    /**
+     * Saves edited Transformer in database.
+     *
+     * @param transformer Edited Transformer to be saved.
+     * @return True if save with success.
+     */
+    public boolean editTransformer(Transformer transformer){
         return false;
     }
 
@@ -83,6 +129,9 @@ public class TransformersAPI {
         @Override
         protected void onPostExecute(String result) {
             token = result;
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString(SAVED_TOKEN, token);
+            editor.apply();
             allSparkApp.onApiReady();
         }
     }
@@ -107,5 +156,16 @@ public class TransformersAPI {
         }
 
         return result;
+    }
+
+    /**
+     * Removes the Transformer from database.
+     *
+     * @param transformer Transformer to be deleted.
+     * @return True if delete with success.
+     */
+    public boolean deleteTransformer(Transformer transformer){
+        notifyDataSetListeners();
+        return false;
     }
 }

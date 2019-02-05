@@ -30,8 +30,17 @@
     <string name="title_activity_detail">DetailActivity</string>
     <string name="lbl_random_edit">Random Edit</string>
     <string name="lbl_ok">OK</string>
+    <string name="lbl_yes">YES</string>
+    <string name="lbl_no">NO</string>
     <string name="lbl_delete">Delete</string>
     <string name="lbl_transformer_image">Transformer Image</string>
     <string name="lbl_allspark_explained">The AllSpark will randomly generate a transformer.\nSelect the team a see what you get.</string>
+    <string name="lbl_confirm_delete">Are you sure you want to delete this Transformer?</string>
+    <string name="lbl_confirm_edit">Edit mode will only set new random values for your Transformer. Do you want to proceed?</string>
+    <string name="lbl_delete_success">Transformer deleted successfully.</string>
+    <string name="lbl_delete_fail">An error occurred while deleting. .</string>
+    <string name="lbl_edit_success">Transformer edited successfully.</string>
+    <string name="lbl_edit_fail">An error occurred while editing. .</string>
+
 
 </resources>

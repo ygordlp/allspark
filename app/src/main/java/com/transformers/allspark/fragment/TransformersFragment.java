@@ -29,7 +29,7 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class TransformersFragment extends Fragment implements OnItemSelectedListener {
+public class TransformersFragment extends Fragment implements OnItemSelectedListener, TransformersAPI.DataSetChangeListener {
 
     private static final String TAG = "TransformersFragment";
     private TransformersRecyclerViewAdapter adapter;
@@ -59,6 +59,7 @@ public class TransformersFragment extends Fragment implements OnItemSelectedList
         try {
             AllSparkApp app = (AllSparkApp) getActivity().getApplication();
             api = app.getTransformersAPI();
+            api.addDataSetChangeListener(this);
         } catch (NullPointerException e) {
             Log.e(TAG, "Null application.");
         }
@@ -96,6 +97,11 @@ public class TransformersFragment extends Fragment implements OnItemSelectedList
         intent.putExtra(DetailActivity.NEW_TRANSFORMER, false);
 
         startActivity(intent);
+    }
+
+    @Override
+    public void onDataSetChanged() {
+        new LoadTransformersTask().execute();
     }
 
     /**

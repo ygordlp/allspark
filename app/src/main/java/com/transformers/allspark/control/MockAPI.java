@@ -34,7 +34,7 @@ public class MockAPI extends TransformersAPI {
         transformers = new ArrayList<>();
         Transformer t;
         for (int i = 0; i < 10; i++) {
-            if(i % 2 == 0){
+            if (i % 2 == 0) {
                 t = allSpark.randomGenerate(Transformer.TEAM_AUTOBOTS);
             } else {
                 t = allSpark.randomGenerate(Transformer.TEAM_DECEPTICONS);
@@ -66,7 +66,23 @@ public class MockAPI extends TransformersAPI {
         int id = transformers.size();
         transformer.setId(Integer.toString(id));
         transformers.add(transformer);
-
+        notifyDataSetListeners();
         return true;
+    }
+
+    @Override
+    public boolean editTransformer(Transformer transformer) {
+        notifyDataSetListeners();
+        return true;
+    }
+
+    @Override
+    public boolean deleteTransformer(Transformer transformer) {
+        if(transformers.remove(transformer)){
+            notifyDataSetListeners();
+            return true;
+        } else {
+            return false;
+        }
     }
 }
