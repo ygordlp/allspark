@@ -9,7 +9,7 @@ import android.support.annotation.NonNull;
 public class TransformerRequest {
 
     /** Uniquely generated ID. */
-    public int id;
+    public String id;
 
     /** Transformer name. */
     public String name;

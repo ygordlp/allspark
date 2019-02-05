@@ -13,14 +13,23 @@ import java.util.Random;
  */
 public class AllSpark {
 
-    private static final String AUTOBOTS_FOLDER = "file:///android_asset/Autobots/";
-    private static final String DECEPTICONS_FOLDER = "file:///android_asset/Decepticons/";
+    public static final String AUTOBOTS_BOSS = "Optimus Prime";
+    public static final String DECEPTICONS_BOSS = "Predaking";
 
     private Random random = new Random();
 
     private String[] autobotsNames;
     private String[] decepticonsNames;
 
+    private static AllSpark instance;
+
+    public static AllSpark getInstance(@NonNull String[] autobotsNames, @NonNull String[] decepticonsNames){
+        if(instance == null){
+            instance = new AllSpark(autobotsNames, decepticonsNames);
+        }
+
+        return instance;
+    }
     /**
      * AllSpark constructor.
      * Requires the list of all possible transformers names.
@@ -28,7 +37,7 @@ public class AllSpark {
      * @param autobotsNames    The list of all possible Autobots names.
      * @param decepticonsNames The List of all possible Deceptions names.
      */
-    public AllSpark(@NonNull String[] autobotsNames, @NonNull String[] decepticonsNames) {
+    private AllSpark(@NonNull String[] autobotsNames, @NonNull String[] decepticonsNames) {
         this.autobotsNames = autobotsNames;
         this.decepticonsNames = decepticonsNames;
     }
@@ -37,20 +46,20 @@ public class AllSpark {
      * Generate a random transformer.
      *
      * @param team Valid team Transformer.TEAM_AUTOBOTS or Transformer.TEAM_DECEPTICONS
-     * @return
+     * @return A Transformer instance with random generated data.
      */
     public Transformer randomGenerate(String team) {
         Transformer transformer = new Transformer();
         transformer.setTeam(team);
         transformer.setName(getRandomName(transformer.getTeam()));
-        transformer.setStrength(randomValue(1,10));
-        transformer.setIntelligence(randomValue(1,10));
-        transformer.setSpeed(randomValue(1,10));
-        transformer.setEndurance(randomValue(1,10));
-        transformer.setRank(randomValue(1,10));
-        transformer.setCourage(randomValue(1,10));
-        transformer.setFirepower(randomValue(1,10));
-        transformer.setSkill(randomValue(1,10));
+        transformer.setStrength(randomValue(1, 10));
+        transformer.setIntelligence(randomValue(1, 10));
+        transformer.setSpeed(randomValue(1, 10));
+        transformer.setEndurance(randomValue(1, 10));
+        transformer.setRank(randomValue(1, 10));
+        transformer.setCourage(randomValue(1, 10));
+        transformer.setFirepower(randomValue(1, 10));
+        transformer.setSkill(randomValue(1, 10));
 
 
         return transformer;
@@ -62,9 +71,9 @@ public class AllSpark {
      * @param team Valid team Transformer.TEAM_AUTOBOTS or Transformer.TEAM_DECEPTICONS
      * @return Random name.
      */
-    private String getRandomName(String team){
+    private String getRandomName(String team) {
         String[] names;
-        if(team.equals(Transformer.TEAM_AUTOBOTS)){
+        if (team.equals(Transformer.TEAM_AUTOBOTS)) {
             names = autobotsNames;
         } else {
             names = decepticonsNames;
@@ -86,4 +95,6 @@ public class AllSpark {
     private int randomValue(int min, int max) {
         return random.nextInt((max - min) + 1) + min;
     }
+
+
 }

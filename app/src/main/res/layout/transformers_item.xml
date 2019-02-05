@@ -15,12 +15,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="16dp">
+        android:gravity="center"
+        android:padding="8dp">
 
         <ImageView
             android:id="@+id/imgTeamIcon"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginEnd="8dp"
             android:contentDescription="@string/lbl_team_icon" />
 
         <LinearLayout
@@ -32,7 +34,7 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
+                android:layout_marginBottom="4dp"
                 android:orientation="horizontal">
 
                 <TextView
@@ -40,9 +42,11 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/transformers"
                     android:text="@string/lbl_name"
+                    android:layout_marginEnd="8dp"
                     android:textSize="18sp" />
 
                 <TextView
+                    android:id="@+id/txtName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/lbl_string_not_set" />
@@ -163,7 +167,8 @@
             android:background="?android:attr/selectableItemBackground"
             android:id="@+id/btnInfo"
             android:layout_width="48dp"
-            android:layout_height="48dp" />
+            android:layout_height="48dp"
+            android:contentDescription="@string/lbl_details" />
 
 
     </LinearLayout>

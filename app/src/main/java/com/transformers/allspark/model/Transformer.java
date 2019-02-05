@@ -5,6 +5,9 @@ package com.transformers.allspark.model;
  */
 public class Transformer {
 
+    private static final String AUTOBOTS_FOLDER = "file:///android_asset/Autobots/";
+    private static final String DECEPTICONS_FOLDER = "file:///android_asset/Decepticons/";
+
     public static final String TEAM_AUTOBOTS = "A";
     public static final String TEAM_DECEPTICONS = "D";
 
@@ -15,7 +18,7 @@ public class Transformer {
     private static final int INVALID_VALUE = 0;
 
     /** Uniquely generated ID. */
-    private int id;
+    private String id;
 
     /** Transformer name. */
     private String name;
@@ -54,7 +57,7 @@ public class Transformer {
      * Gets Transformer's id.
      * @return Unique id.
      */
-    public int getId() {
+    public String getId() {
         return id;
     }
 
@@ -62,7 +65,7 @@ public class Transformer {
      * Sets Transformer's id
      * @param id A unique int value for id.
      */
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -323,5 +326,27 @@ public class Transformer {
      */
     private boolean inRange(int i){
         return i > 0 && i <= 10;
+    }
+
+    /**
+     * Gets the transformer image.
+     *
+     * @param transformer Transformer object with a valid name.
+     * @return The address for the image.
+     */
+    public String getImage(Transformer transformer) {
+        if (transformer == null || transformer.getName() == null) {
+            return null;
+        }
+
+        String result;
+
+        if(transformer.getTeam().equals(Transformer.TEAM_DECEPTICONS)){
+            result =  DECEPTICONS_FOLDER + transformer.getName() + ".jpg";
+        } else {
+            result =  AUTOBOTS_FOLDER + transformer.getName() + ".jpg";
+        }
+
+        return result;
     }
 }

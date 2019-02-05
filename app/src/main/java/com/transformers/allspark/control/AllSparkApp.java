@@ -1,22 +1,17 @@
 package com.transformers.allspark.control;
 
 import android.app.Application;
-import android.content.Context;
-import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
-import com.transformers.allspark.model.Transformer;
-import com.transformers.allspark.model.Transformers;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.transformers.allspark.R;
+import com.transformers.allspark.util.AllSpark;
 
 /**
  * Application class.
  * Holds application states and data.
  */
-public class AllSparkApp extends Application implements TransformersAPI.ApiReadyListener {
+public class AllSparkApp extends Application {
 
     private static final String TAG = "AllSparkApp";
 
@@ -24,6 +19,7 @@ public class AllSparkApp extends Application implements TransformersAPI.ApiReady
         void onLoadFinished();
     }
 
+    private AllSpark allSpark;
     private LoaderListener listener;
     private TransformersAPI api;
 
@@ -32,27 +28,45 @@ public class AllSparkApp extends Application implements TransformersAPI.ApiReady
         super.onCreate();
     }
 
-    /** Initialize everything, load api. */
+    /**
+     * Initialize everything, load api.
+     */
     public void init(@NonNull LoaderListener listener) {
         this.listener = listener;
         Log.d(TAG, "Starting API.");
+
+        allSpark = AllSpark.getInstance(getResources().getStringArray(R.array.Autobots),
+                getResources().getStringArray(R.array.Decepticons));
+
         //api = new TransformersAPI(this);
-        api = new SampleDataAPI(this);
+        api = new MockAPI(this);
     }
 
-    public TransformersAPI getTransformersAPI(){
+    /**
+     * Returns the Transformers API access.
+     *
+     * @return Transformers API
+     */
+    public TransformersAPI getTransformersAPI() {
         return this.api;
     }
 
-    @Override
-    public void onReady() {
+    /**
+     * Returns the AllSpark util class.
+     *
+     * @return AllSpark
+     */
+    public AllSpark getAllSpark() {
+        return allSpark;
+    }
+
+    /**
+     * To be called when API is ready
+     */
+    public void onApiReady() {
         Log.d(TAG, "API ready");
         listener.onLoadFinished();
     }
 
-    @Override
-    public Context getContext() {
-        return getApplicationContext();
-    }
 
 }

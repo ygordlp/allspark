@@ -1,5 +1,6 @@
 package com.transformers.allspark.adapter;
 
+import android.annotation.SuppressLint;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -24,7 +25,7 @@ public class TransformersRecyclerViewAdapter extends RecyclerView.Adapter<Transf
         this.listener = listener;
     }
 
-    public void setTransformers(List<Transformer> transformers){
+    public void setTransformers(List<Transformer> transformers) {
         this.transformers = transformers;
         notifyDataSetChanged();
     }
@@ -41,7 +42,7 @@ public class TransformersRecyclerViewAdapter extends RecyclerView.Adapter<Transf
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
         viewHolder.transformer = transformers.get(i);
-
+        viewHolder.updateUI();
     }
 
     @Override
@@ -54,20 +55,22 @@ public class TransformersRecyclerViewAdapter extends RecyclerView.Adapter<Transf
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        public Transformer transformer;
-        public TextView txtStrength;
-        public TextView txtIntelligence;
-        public TextView txtSpeed;
-        public TextView txtEndurance;
-        public TextView txtRank;
-        public TextView txtCourage;
-        public TextView txtFirepower;
-        public TextView txtSkill;
-        public ImageButton btnInfo;
-        public ImageView imgTeamIcon;
+        private Transformer transformer;
+        private TextView txtName;
+        private TextView txtStrength;
+        private TextView txtIntelligence;
+        private TextView txtSpeed;
+        private TextView txtEndurance;
+        private TextView txtRank;
+        private TextView txtCourage;
+        private TextView txtFirepower;
+        private TextView txtSkill;
+        private ImageButton btnInfo;
+        private ImageView imgTeamIcon;
 
-        public ViewHolder(View view) {
+        private ViewHolder(View view) {
             super(view);
+            txtName = view.findViewById(R.id.txtName);
             txtStrength = view.findViewById(R.id.txtStrength);
             txtIntelligence = view.findViewById(R.id.txtIntelligence);
             txtSpeed = view.findViewById(R.id.txtSpeed);
@@ -75,11 +78,34 @@ public class TransformersRecyclerViewAdapter extends RecyclerView.Adapter<Transf
             txtRank = view.findViewById(R.id.txtRank);
             txtCourage = view.findViewById(R.id.txtCourage);
             txtFirepower = view.findViewById(R.id.txtFirepower);
+            txtSkill = view.findViewById(R.id.txtSkill);
+            btnInfo = view.findViewById(R.id.btnInfo);
+            imgTeamIcon = view.findViewById(R.id.imgTeamIcon);
         }
 
-        @Override
-        public String toString() {
-            return super.toString() + " '" + transformer.getName() + "'";
+        @SuppressLint("SetTextI18n")
+        private void updateUI() {
+            txtName.setText(transformer.getName());
+            txtStrength.setText(Integer.toString(transformer.getStrength()));
+            txtIntelligence.setText(Integer.toString(transformer.getIntelligence()));
+            txtSpeed.setText(Integer.toString(transformer.getSpeed()));
+            txtEndurance.setText(Integer.toString(transformer.getEndurance()));
+            txtRank.setText(Integer.toString(transformer.getRank()));
+            txtCourage.setText(Integer.toString(transformer.getCourage()));
+            txtFirepower.setText(Integer.toString(transformer.getFirepower()));
+            txtSkill.setText(Integer.toString(transformer.getSkill()));
+            if (transformer.getTeam().equals(Transformer.TEAM_AUTOBOTS)) {
+                imgTeamIcon.setImageResource(R.drawable.ic_autobot);
+            } else {
+                imgTeamIcon.setImageResource(R.drawable.ic_decepticon);
+            }
+
+            btnInfo.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    listener.onItemSelected(transformer);
+                }
+            });
         }
     }
 

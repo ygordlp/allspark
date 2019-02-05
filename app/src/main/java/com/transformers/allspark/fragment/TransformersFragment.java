@@ -1,7 +1,7 @@
 package com.transformers.allspark.fragment;
 
 
-import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -16,6 +16,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.transformers.allspark.R;
+import com.transformers.allspark.activity.DetailActivity;
 import com.transformers.allspark.adapter.TransformersRecyclerViewAdapter;
 import com.transformers.allspark.adapter.TransformersRecyclerViewAdapter.OnItemSelectedListener;
 import com.transformers.allspark.control.AllSparkApp;
@@ -43,7 +44,7 @@ public class TransformersFragment extends Fragment implements OnItemSelectedList
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, @NonNull ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_transformers, container, false);
@@ -55,8 +56,12 @@ public class TransformersFragment extends Fragment implements OnItemSelectedList
         adapter = new TransformersRecyclerViewAdapter(this);
         recyclerView.setAdapter(adapter);
 
-        AllSparkApp app = (AllSparkApp) getActivity().getApplication();
-        api = app.getTransformersAPI();
+        try {
+            AllSparkApp app = (AllSparkApp) getActivity().getApplication();
+            api = app.getTransformersAPI();
+        } catch (NullPointerException e) {
+            Log.e(TAG, "Null application.");
+        }
 
 
         recyclerView.setVisibility(View.INVISIBLE);
@@ -86,7 +91,12 @@ public class TransformersFragment extends Fragment implements OnItemSelectedList
 
     @Override
     public void onItemSelected(Transformer item) {
+        Log.d(TAG, "Item selected");
+        Intent intent = new Intent(getActivity(), DetailActivity.class);
+        intent.putExtra(DetailActivity.TRANSFORMER_ID, item.getId());
+        intent.putExtra(DetailActivity.EDIT_MODE, true);
 
+        startActivity(intent);
     }
 
     /**
@@ -97,9 +107,7 @@ public class TransformersFragment extends Fragment implements OnItemSelectedList
         @Override
         protected List<Transformer> doInBackground(Void... params) {
             Log.d(TAG, "Loading transformers");
-            List<Transformer> transformers = api.getAllTransformers();
-
-            return  transformers;
+            return  api.getAllTransformers();
         }
 
         @Override

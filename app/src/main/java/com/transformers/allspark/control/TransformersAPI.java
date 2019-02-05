@@ -1,12 +1,9 @@
 package com.transformers.allspark.control;
 
-import android.content.Context;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 
 import com.transformers.allspark.model.Transformer;
-import com.transformers.allspark.model.TransformerRequest;
-import com.transformers.allspark.model.Transformers;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,49 +13,49 @@ import java.util.List;
  */
 public class TransformersAPI {
 
-    public interface ApiReadyListener {
-        void onReady();
-        Context getContext();
-    }
+    private static final String AUTOBOTS_FOLDER = "file:///android_asset/Autobots/";
+    private static final String DECEPTICONS_FOLDER = "file:///android_asset/Decepticons/";
 
-    private ApiReadyListener listener;
+    private AllSparkApp allSparkApp;
     private String token = null;
 
     /**
      * TransformersAPI that contains all API interface to
-     * @param listener
+     *
+     * @param allSparkApp The AllSparkApp instance.
      */
-    public TransformersAPI(@NonNull ApiReadyListener listener){
-        this.listener = listener;
+    public TransformersAPI(@NonNull AllSparkApp allSparkApp) {
+        this.allSparkApp = allSparkApp;
         init();
     }
 
     /**
      * Initialize API.
      */
-    private void init(){
+    private void init() {
         TokenTask tokenTask = new TokenTask();
         tokenTask.execute();
     }
 
     /**
      * Gets a list of the Transformers created using the POST API.
+     *
      * @return A maximum list of 50 Transformers starting from the oldest created Transformer.
      */
-    public List<Transformer> getAllTransformers(){
+    public List<Transformer> getAllTransformers() {
         //TODO: Get data
 
         return new ArrayList<>();
     }
 
     /**
-     * Creates a Transformer with the provided data in the request body.
+     * Creates a Transformer with the provided data and saves it in the database.
      *
-     * @param request A valid TransformerRequest
+     * @param transformer A valid Transformer instance.
      * @return True if added with success.
      */
-    public boolean addTransformer(TransformerRequest request){
-        return  false;
+    public boolean addTransformer(Transformer transformer) {
+        return false;
     }
 
     /**
@@ -67,7 +64,7 @@ public class TransformersAPI {
      * @param id Valid id;
      * @return A Transformer if found, null otherwise.
      */
-    public Transformer getTransformer(int id){
+    public Transformer getTransformer(String id) {
         return null;
     }
 
@@ -80,13 +77,34 @@ public class TransformersAPI {
         protected String doInBackground(Void... params) {
             String token = "TEST";
 
-            return  token;
+            return token;
         }
 
         @Override
         protected void onPostExecute(String result) {
             token = result;
-            listener.onReady();
+            allSparkApp.onApiReady();
         }
+    }
+
+    /**
+     * Gets the transformer image.
+     *
+     * @param transformer Transformer object with a valid name.
+     * @return The address for the image.
+     */
+    public String getTransformerImage(Transformer transformer) {
+        String result = null;
+        if (transformer != null && transformer.getName() != null &&
+                transformer.getTeam() != null) {
+
+            if (transformer.getTeam().equals(Transformer.TEAM_DECEPTICONS)) {
+                result = DECEPTICONS_FOLDER + transformer.getName() + ".jpg";
+            } else {
+                result = AUTOBOTS_FOLDER + transformer.getName() + ".jpg";
+            }
+        }
+
+        return result;
     }
 }
