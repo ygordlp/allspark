@@ -17,7 +17,9 @@ import com.transformers.allspark.control.AllSparkApp;
  */
 public class StartActivity extends AppCompatActivity implements AllSparkApp.LoaderListener {
 
-    /** Shows start screen for at least 2 seconds. */
+    /**
+     * Shows start screen for at least 2 seconds.
+     */
     private static final long WAIT_TIME = 2000;
     private static final String TAG = "StartActivity";
     private long startTime;
@@ -33,7 +35,7 @@ public class StartActivity extends AppCompatActivity implements AllSparkApp.Load
         app.init(this);
     }
 
-    private void goToMainActivity(){
+    private void goToMainActivity() {
         Log.d(TAG, "Starting main activity.");
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
@@ -45,9 +47,9 @@ public class StartActivity extends AppCompatActivity implements AllSparkApp.Load
         long endTime = System.currentTimeMillis();
         long diff = endTime - startTime;
 
-        if(diff < WAIT_TIME){
+        if (diff < WAIT_TIME) {
             long remain = WAIT_TIME - diff;
-            new CountDownTimer(remain, remain){
+            new CountDownTimer(remain, remain) {
 
                 @Override
                 public void onTick(long millisUntilFinished) {

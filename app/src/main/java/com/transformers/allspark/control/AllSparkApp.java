@@ -16,12 +16,15 @@ import java.util.List;
  * Application class.
  * Holds application states and data.
  */
-public class AllSparkApp extends Application implements TransformersAPI.ApiListener {
+public class AllSparkApp extends Application {
 
     private static final String TAG = "AllSparkApp";
+    private static final int REASON_TOKEN_FAIL = 1;
+    private static final int REASON_LOAD_FAIL = 2;
 
     public interface LoaderListener {
         void onLoadFinished();
+
         void onLoadFail(String reason);
     }
 
@@ -45,11 +48,13 @@ public class AllSparkApp extends Application implements TransformersAPI.ApiListe
                 getResources().getStringArray(R.array.Decepticons));
 
         Log.d(TAG, "Use mock: " + BuildConfig.MOCK);
-        if(BuildConfig.MOCK) {
+        if (BuildConfig.MOCK) {
             api = new MockAPI(this);
         } else {
             api = new TransformersAPI(this);
         }
+
+        new InitApiTask().execute();
     }
 
     /**
@@ -71,20 +76,18 @@ public class AllSparkApp extends Application implements TransformersAPI.ApiListe
     }
 
 
-    @Override
-    public void onApiReady() {
+    private void onApiReady() {
         Log.d(TAG, "API ready");
         new LoadTransformersTask().execute();
     }
 
-    @Override
-    public void onApiFailed(int reason) {
+    private void onApiFailed(final int reason) {
         String strReason = "unknown";
-        switch (reason){
-            case TransformersAPI.REASON_TOKEN_FAIL:
+        switch (reason) {
+            case REASON_TOKEN_FAIL:
                 strReason = getString(R.string.str_token_fail);
                 break;
-            case TransformersAPI.REASON_LOAD_FAIL:
+            case REASON_LOAD_FAIL:
                 strReason = getString(R.string.str_load_fail);
                 break;
         }
@@ -94,26 +97,51 @@ public class AllSparkApp extends Application implements TransformersAPI.ApiListe
     /**
      * To be called when all Transformers were loaded.
      */
-    private void onTransformersLoaded(){
+    private void onTransformersLoaded() {
         listener.onLoadFinished();
     }
 
     /**
-     * Async task to request API Token.
+     * Async task to load all Transformers.
      */
-    public class LoadTransformersTask extends AsyncTask<Void, Void, List<Transformer> > {
+    public class LoadTransformersTask extends AsyncTask<Void, Void, Boolean> {
 
         @Override
-        protected List<Transformer> doInBackground(Void... params) {
+        protected Boolean doInBackground(Void... params) {
             Log.d(TAG, "Loading transformers");
-            api.loadTransformers();
-            return  api.getAllTransformers();
+            return api.loadTransformers();
         }
 
         @Override
-        protected void onPostExecute(List<Transformer> result) {
-            Log.d(TAG, "Transformers loaded");
-            onTransformersLoaded();
+        protected void onPostExecute(Boolean success) {
+            if (success) {
+                onTransformersLoaded();
+            } else {
+                onApiFailed(REASON_LOAD_FAIL);
+            }
+
+        }
+    }
+
+    /**
+     * Async task to initialize API.
+     */
+    public class InitApiTask extends AsyncTask<Void, Void, Boolean> {
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            Log.d(TAG, "Initialize API");
+            return api.init();
+        }
+
+        @Override
+        protected void onPostExecute(Boolean success) {
+            if (success) {
+                onApiReady();
+            } else {
+                onApiFailed(REASON_TOKEN_FAIL);
+            }
+
         }
     }
 

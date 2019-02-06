@@ -11,6 +11,8 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/list"
         android:visibility="invisible"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="4dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:listitem="@layout/transformers_item" />
