@@ -1,11 +1,11 @@
 package com.transformers.allspark.control;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 
 import com.transformers.allspark.model.Transformer;
-import com.transformers.allspark.model.TransformerRequest;
-import com.transformers.allspark.model.Transformers;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,48 +15,109 @@ import java.util.List;
  */
 public class TransformersAPI {
 
-    public interface ApiReadyListener {
-        void onReady();
-    }
+    private static final String SHARED_PREFERENCES = "com.transformers.allspark.SHARED_PREFERENCES";
+    private static final String SAVED_TOKEN = "SAVED_TOKEN";
+    private static final String AUTOBOTS_FOLDER = "file:///android_asset/Autobots/";
+    private static final String DECEPTICONS_FOLDER = "file:///android_asset/Decepticons/";
 
-    private ApiReadyListener listener;
+    protected AllSparkApp allSparkApp;
+    protected List<Transformer> transformers = new ArrayList<>();
     private String token = null;
+    private List<DataSetChangeListener> listeners = new ArrayList<>();
+    private SharedPreferences sharedPreferences;
+
+    public interface DataSetChangeListener {
+        void onDataSetChanged();
+    }
 
     /**
      * TransformersAPI that contains all API interface to
-     * @param listener
+     *
+     * @param allSparkApp The AllSparkApp instance.
      */
-    public TransformersAPI(@NonNull ApiReadyListener listener){
-        this.listener = listener;
+    public TransformersAPI(@NonNull AllSparkApp allSparkApp) {
+        this.allSparkApp = allSparkApp;
+        this.sharedPreferences = allSparkApp.getSharedPreferences(SHARED_PREFERENCES, Context.MODE_PRIVATE);
         init();
     }
 
     /**
      * Initialize API.
      */
-    private void init(){
-        TokenTask tokenTask = new TokenTask();
-        tokenTask.execute();
+    private void init() {
+        String savedToken = sharedPreferences.getString(SAVED_TOKEN, null);
+        if(savedToken == null){
+            TokenTask tokenTask = new TokenTask();
+            tokenTask.execute();
+        } else {
+            token = savedToken;
+            allSparkApp.onApiReady();
+        }
+
     }
 
     /**
-     * Gets a list of the Transformers created using the POST API.
+     * Adds a listener to be notified when data is changed
+     * @param listener DataSetChangeListener to be added.
+     */
+    public void addDataSetChangeListener(DataSetChangeListener listener){
+        listeners.add(listener);
+    }
+
+    /**
+     * Removes a listener
+     * @param listener DataSetChangeListener to be removed.
+     */
+    public void removeDataSetChangeListener(DataSetChangeListener listener){
+        listeners.remove(listener);
+    }
+
+    /**
+     * Notify all listeners.
+      */
+    protected void notifyDataSetListeners(){
+        for(DataSetChangeListener listener : listeners){
+            listener.onDataSetChanged();
+        }
+    }
+
+    /**
+     * Loads and cache all save Transformers from database.
+     */
+    public void loadTransformers(){
+        notifyDataSetListeners();
+    }
+
+    /**
+     * Gets a list of all loaded transformers Transformers created using the POST API.
+     *
      * @return A maximum list of 50 Transformers starting from the oldest created Transformer.
      */
-    public Transformers getAllTransformers(){
-        Transformers results = new Transformers();
-
-        return results;
+    public List<Transformer> getAllTransformers() {
+        //TODO: Get data
+        return transformers;
     }
 
     /**
-     * Creates a Transformer with the provided data in the request body.
+     * Creates a Transformer with the provided data and saves it in the database.
      *
-     * @param request A valid TransformerRequest
+     * @param transformer A valid Transformer instance.
      * @return True if added with success.
      */
-    public boolean addTransformer(TransformerRequest request){
-        return  false;
+    public boolean addTransformer(Transformer transformer) {
+
+        notifyDataSetListeners();
+        return false;
+    }
+
+    /**
+     * Saves edited Transformer in database.
+     *
+     * @param transformer Edited Transformer to be saved.
+     * @return True if save with success.
+     */
+    public boolean editTransformer(Transformer transformer){
+        return false;
     }
 
     /**
@@ -65,7 +126,7 @@ public class TransformersAPI {
      * @param id Valid id;
      * @return A Transformer if found, null otherwise.
      */
-    public Transformer getTransformer(int id){
+    public Transformer getTransformer(String id) {
         return null;
     }
 
@@ -78,13 +139,49 @@ public class TransformersAPI {
         protected String doInBackground(Void... params) {
             String token = "TEST";
 
-            return  token;
+            return token;
         }
 
         @Override
         protected void onPostExecute(String result) {
             token = result;
-            listener.onReady();
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString(SAVED_TOKEN, token);
+            editor.apply();
+            allSparkApp.onApiReady();
         }
+    }
+
+    /**
+     * Gets the transformer image.
+     *
+     * @param transformer Transformer object with a valid name.
+     * @return The address for the image.
+     */
+    public String getTransformerImage(Transformer transformer) {
+        String result = null;
+        if (transformer != null && transformer.getName() != null &&
+                transformer.getTeam() != null) {
+            String name = transformer.getName().replace(" ", "_");
+
+            if (transformer.getTeam().equals(Transformer.TEAM_DECEPTICONS)) {
+                result = DECEPTICONS_FOLDER + name + ".jpg";
+            } else {
+                result = AUTOBOTS_FOLDER + name + ".jpg";
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Removes the Transformer from database.
+     *
+     * @param transformer Transformer to be deleted.
+     * @return True if delete with success.
+     */
+    public boolean deleteTransformer(Transformer transformer){
+        notifyDataSetListeners();
+        return false;
     }
 }

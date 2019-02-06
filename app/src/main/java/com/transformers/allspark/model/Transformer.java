@@ -5,6 +5,12 @@ package com.transformers.allspark.model;
  */
 public class Transformer {
 
+    private static final String AUTOBOTS_FOLDER = "file:///android_asset/Autobots/";
+    private static final String DECEPTICONS_FOLDER = "file:///android_asset/Decepticons/";
+
+    public static final String TEAM_AUTOBOTS = "A";
+    public static final String TEAM_DECEPTICONS = "D";
+
     /** Default value for strings with invalid data. */
     private static final String NOT_SET = "NOT SET";
 
@@ -12,7 +18,7 @@ public class Transformer {
     private static final int INVALID_VALUE = 0;
 
     /** Uniquely generated ID. */
-    private int id;
+    private String id;
 
     /** Transformer name. */
     private String name;
@@ -51,7 +57,7 @@ public class Transformer {
      * Gets Transformer's id.
      * @return Unique id.
      */
-    public int getId() {
+    public String getId() {
         return id;
     }
 
@@ -59,7 +65,7 @@ public class Transformer {
      * Sets Transformer's id
      * @param id A unique int value for id.
      */
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -76,13 +82,17 @@ public class Transformer {
      * @param name A valid non-empty string.
      */
     public void setName(String name) {
-        this.name = name;
+        if(name == null || name.isEmpty()){
+            this.name = NOT_SET;
+        } else {
+            this.name = name;
+        }
     }
 
     /**
      * Gets Transformer's team.
-     * A - Autobot.
-     * B - Decepticon.
+     * A - Autobot. Transformer.TEAM_AUTOBOTS
+     * B - Decepticon. Transformer.TEAM_DECEPTICONS
      *
      * @return Transformer's team, either “A” or “D” (Autobot or Decepticon).
      */
@@ -92,12 +102,14 @@ public class Transformer {
 
     /**
      * Sets Transformer's team, either “A” or “D” (Autobot or Decepticon).
-     * Default value A.
+     * A - Autobot. Transformer.TEAM_AUTOBOTS
+     * B - Decepticon. Transformer.TEAM_DECEPTICONS
+     * Default value Transformer.TEAM_AUTOBOTS.
      * @param team Transformer's team.
      */
     public void setTeam(String team) {
         if(team == null || team.isEmpty() || (!team.equals("A") && !team.equals("D"))){
-            this.team = "A";
+            this.team = TEAM_AUTOBOTS;
         } else {
             this.team = team;
         }
@@ -314,5 +326,27 @@ public class Transformer {
      */
     private boolean inRange(int i){
         return i > 0 && i <= 10;
+    }
+
+    /**
+     * Gets the transformer image.
+     *
+     * @param transformer Transformer object with a valid name.
+     * @return The address for the image.
+     */
+    public String getImage(Transformer transformer) {
+        if (transformer == null || transformer.getName() == null) {
+            return null;
+        }
+
+        String result;
+
+        if(transformer.getTeam().equals(Transformer.TEAM_DECEPTICONS)){
+            result =  DECEPTICONS_FOLDER + transformer.getName() + ".jpg";
+        } else {
+            result =  AUTOBOTS_FOLDER + transformer.getName() + ".jpg";
+        }
+
+        return result;
     }
 }
