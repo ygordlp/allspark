@@ -1,6 +1,7 @@
 package com.transformers.allspark.activity;
 
-import android.content.DialogInterface;
+import android.app.ProgressDialog;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -18,7 +19,7 @@ import com.transformers.allspark.control.TransformersAPI;
 import com.transformers.allspark.model.Transformer;
 import com.transformers.allspark.util.AllSpark;
 
-public class DetailActivity extends AppCompatActivity implements View.OnClickListener, TransformersAPI.DataSetChangeListener {
+public class DetailActivity extends AppCompatActivity implements View.OnClickListener {
 
     public static final String TRANSFORMER_ID = "TRANSFORMER_ID";
     public static final String NEW_TRANSFORMER = "NEW_TRANSFORMER";
@@ -26,6 +27,7 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
 
     private TransformersAPI api;
     private AllSpark allSpark;
+    private ProgressDialog dialog;
     private Button btnEdit;
     private Button btnOk;
     private Button btnDelete;
@@ -89,19 +91,15 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
         updateUI();
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        api.addDataSetChangeListener(this);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        api.removeDataSetChangeListener(this);
-    }
-
+    /**
+     * Updates UI with current Transformer values.
+     */
     private void updateUI() {
+        if (transformer == null) {
+            Log.e(TAG, "Null Transformer for details");
+            finish();
+            return;
+        }
 
         txtName.setText(transformer.getName());
         txtStrength.setText(Integer.toString(transformer.getStrength()));
@@ -112,14 +110,12 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
         txtCourage.setText(Integer.toString(transformer.getCourage()));
         txtFirepower.setText(Integer.toString(transformer.getFirepower()));
         txtSkill.setText(Integer.toString(transformer.getSkill()));
-        if (transformer.getTeam().equals(Transformer.TEAM_AUTOBOTS)) {
-            imgTeamIcon.setImageResource(R.drawable.ic_autobot);
-        } else {
-            imgTeamIcon.setImageResource(R.drawable.ic_decepticon);
-        }
+        Picasso.get()
+                .load(transformer.getTeam_icon())
+                .error(R.drawable.card_placeholder)
+                .into(imgTeamIcon);
 
         String imagePath = api.getTransformerImage(transformer);
-        Log.d(TAG, "Loading image: " + imagePath);
         Picasso.get()
                 .load(imagePath)
                 .error(R.drawable.card_placeholder)
@@ -144,38 +140,29 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
     private void showEditDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(R.string.lbl_confirm_edit)
-                .setPositiveButton(R.string.lbl_yes, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        editConfirmed();
-                    }
-                })
-                .setNegativeButton(R.string.lbl_no, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialogCanceled();
-                    }
-                });
+                .setPositiveButton(R.string.lbl_yes, (dialog, id) -> editConfirmed())
+                .setNegativeButton(R.string.lbl_no, (dialog, id) -> dialogCanceled());
         builder.create().show();
     }
 
     private void showDeleteDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(R.string.lbl_confirm_delete)
-                .setPositiveButton(R.string.lbl_yes, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        deleteConfirmed();
-                    }
-                })
-                .setNegativeButton(R.string.lbl_no, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialogCanceled();
-                    }
-                });
+                .setPositiveButton(R.string.lbl_yes, (dialog, id) -> deleteConfirmed())
+                .setNegativeButton(R.string.lbl_no, (dialog, id) -> dialogCanceled());
         builder.create().show();
     }
 
     private void deleteConfirmed() {
-        api.removeDataSetChangeListener(this);
-        if (api.deleteTransformer(transformer)) {
+        dialog = ProgressDialog.show(this, "", getString(R.string.lbl_deleting), true);
+        new DeleteTask().execute();
+    }
+
+    private void onDeleteResult(boolean success) {
+        if (dialog != null) {
+            dialog.cancel();
+        }
+        if (success) {
             Toast toast = Toast.makeText(this, R.string.lbl_delete_success, Toast.LENGTH_SHORT);
             toast.getView().setBackgroundResource(R.color.positive);
             toast.show();
@@ -184,13 +171,20 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
             toast.getView().setBackgroundResource(R.color.negative);
             toast.show();
         }
-
         finish();
     }
 
     private void editConfirmed() {
+        dialog = ProgressDialog.show(this, "", getString(R.string.lbl_editing), true);
         allSpark.setRandomSpec(transformer);
-        if (api.editTransformer(transformer)) {
+        new EditTask().execute();
+    }
+
+    private void onEditResult(boolean success) {
+        if (dialog != null) {
+            dialog.cancel();
+        }
+        if (success) {
             Toast toast = Toast.makeText(this, R.string.lbl_edit_success, Toast.LENGTH_SHORT);
             toast.getView().setBackgroundResource(R.color.positive);
             toast.show();
@@ -199,14 +193,45 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
             toast.getView().setBackgroundResource(R.color.negative);
             toast.show();
         }
+
+        updateUI();
     }
 
     private void dialogCanceled() {
         Log.d(TAG, "Dialog canceled");
     }
 
-    @Override
-    public void onDataSetChanged() {
-        updateUI();
+
+    /**
+     * Async task to delete transformer.
+     */
+    public class DeleteTask extends AsyncTask<Void, Void, Boolean> {
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            return api.deleteTransformer(transformer);
+        }
+
+        @Override
+        protected void onPostExecute(Boolean result) {
+            onDeleteResult(result);
+        }
     }
+
+    /**
+     * Async task to edit transformer.
+     */
+    public class EditTask extends AsyncTask<Void, Void, Boolean> {
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            return api.editTransformer(transformer);
+        }
+
+        @Override
+        protected void onPostExecute(Boolean result) {
+            onEditResult(result);
+        }
+    }
+
 }

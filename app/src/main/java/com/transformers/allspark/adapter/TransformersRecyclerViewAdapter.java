@@ -10,6 +10,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
 import com.transformers.allspark.R;
 import com.transformers.allspark.model.Transformer;
 
@@ -94,11 +95,10 @@ public class TransformersRecyclerViewAdapter extends RecyclerView.Adapter<Transf
             txtCourage.setText(Integer.toString(transformer.getCourage()));
             txtFirepower.setText(Integer.toString(transformer.getFirepower()));
             txtSkill.setText(Integer.toString(transformer.getSkill()));
-            if (transformer.getTeam().equals(Transformer.TEAM_AUTOBOTS)) {
-                imgTeamIcon.setImageResource(R.drawable.ic_autobot);
-            } else {
-                imgTeamIcon.setImageResource(R.drawable.ic_decepticon);
-            }
+            Picasso.get()
+                    .load(transformer.getTeam_icon())
+                    .error(R.drawable.card_placeholder)
+                    .into(imgTeamIcon);
 
             btnInfo.setOnClickListener(new View.OnClickListener() {
                 @Override

@@ -43,6 +43,7 @@ public class TransformerRequest {
 
     public TransformerRequest(@NonNull Transformer fromTransformer){
         this.id = fromTransformer.getId();
+        this.name = fromTransformer.getName();
         this.team = fromTransformer.getTeam();
         this.strength = fromTransformer.getStrength();
         this.intelligence = fromTransformer.getIntelligence();

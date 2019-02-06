@@ -38,10 +38,16 @@
     <string name="lbl_confirm_delete">Are you sure you want to delete this Transformer?</string>
     <string name="lbl_confirm_edit">Edit mode will only set new random values for your Transformer. Do you want to proceed?</string>
     <string name="lbl_delete_success">Transformer deleted successfully.</string>
-    <string name="lbl_delete_fail">An error occurred while deleting. .</string>
+    <string name="lbl_delete_fail">An error occurred while deleting.</string>
     <string name="lbl_edit_success">Transformer edited successfully.</string>
-    <string name="lbl_edit_fail">An error occurred while editing. .</string>
+    <string name="lbl_edit_fail">An error occurred while editing.</string>
+    <string name="lbl_create_success">Transformer created successfully.</string>
+    <string name="lbl_create_fail">An error occurred while creating the a Transformer.</string>
     <string name="lbl_start_battle">START BATTLE</string>
+
+    <string name="lbl_creating">CREATING&#8230;</string>
+    <string name="lbl_deleting">DELETING&#8230;</string>
+    <string name="lbl_editing">EDITING&#8230;</string>
 
     <string name="str_battle">%d battle</string>
     <string name="str_battles">%d battles</string>
@@ -52,4 +58,7 @@
     <string name="str_losers">Survivors from the losing team (%s): %s</string>
     <string name="str_no_survivors">No survivors.</string>
 
+    <string name="str_server_fail">An error occurred:\n%s\nPlease check your Internet connection and try again later.</string>
+    <string name="str_token_fail">Unable to access AllSpark servers.</string>
+    <string name="str_load_fail">Unable to get data from AllSpark servers.</string>
 </resources>

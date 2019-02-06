@@ -13,7 +13,7 @@ import java.util.List;
  */
 public class MockAPI extends TransformersAPI {
 
-    AllSpark allSpark;
+    private AllSpark allSpark;
 
     /**
      * MOCKS TransformersAPI that contains all data.
@@ -28,7 +28,6 @@ public class MockAPI extends TransformersAPI {
     @Override
     public void loadTransformers() {
         generateRandomTransformers();
-        notifyDataSetListeners();
     }
 
     /**
@@ -40,8 +39,10 @@ public class MockAPI extends TransformersAPI {
         for (int i = 0; i < 10; i++) {
             if (i % 2 == 0) {
                 t = allSpark.randomGenerate(Transformer.TEAM_AUTOBOTS);
+                t.setTeam_icon("file:///android_asset/ic_autobots.png");
             } else {
                 t = allSpark.randomGenerate(Transformer.TEAM_DECEPTICONS);
+                t.setTeam_icon("file:///android_asset/ic_decepticons.png");
             }
 
             t.setId(t.getName()+Integer.toString(i));
@@ -65,27 +66,20 @@ public class MockAPI extends TransformersAPI {
     }
 
     @Override
-    public boolean addTransformer(Transformer transformer) {
+    public String addTransformer(Transformer transformer) {
         int id = transformers.size();
         transformer.setId(transformer.getName()+Integer.toString(id));
         transformers.add(transformer);
-        notifyDataSetListeners();
-        return true;
+        return transformer.getId();
     }
 
     @Override
     public boolean editTransformer(Transformer transformer) {
-        notifyDataSetListeners();
         return true;
     }
 
     @Override
     public boolean deleteTransformer(Transformer transformer) {
-        if(transformers.remove(transformer)){
-            notifyDataSetListeners();
-            return true;
-        } else {
-            return false;
-        }
+        return transformers.remove(transformer);
     }
 }
