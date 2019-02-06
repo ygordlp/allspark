@@ -41,6 +41,15 @@
     <string name="lbl_delete_fail">An error occurred while deleting. .</string>
     <string name="lbl_edit_success">Transformer edited successfully.</string>
     <string name="lbl_edit_fail">An error occurred while editing. .</string>
+    <string name="lbl_start_battle">START BATTLE</string>
 
+    <string name="str_battle">%d battle</string>
+    <string name="str_battles">%d battles</string>
+    <string name="str_not_enough">You don\'t have enough Transformers to start a battle.\nYou must have at least one on both teams.</string>
+    <string name="str_all_destroyed">All Transformers were destroyed in the battle.</string>
+    <string name="str_battle_tie">There was a tie in battle.</string>
+    <string name="str_winners">Winning team (%s): %s</string>
+    <string name="str_losers">Survivors from the losing team (%s): %s</string>
+    <string name="str_no_survivors">No survivors.</string>
 
 </resources>

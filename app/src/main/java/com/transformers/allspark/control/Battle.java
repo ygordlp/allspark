@@ -35,6 +35,8 @@ public class Battle {
         public List<String> winners;
         /** List of the names of the survivors of the loser team. */
         public List<String> survivors;
+        /** True if there is not enough Transformers to start a battle. */
+        public boolean invalid = false;
     }
 
     private List<Transformer> autobots = new ArrayList<>();
@@ -53,6 +55,15 @@ public class Battle {
                 decepticons.add(t);
             }
         }
+    }
+
+    /**
+     * Checks if there is enough Transformers to start battle;
+     *
+     * @return True if it is possible to battle.
+     */
+    private boolean isValid(){
+        return autobots.size() > 0 && decepticons.size() > 0;
     }
 
     /**
@@ -99,6 +110,11 @@ public class Battle {
      */
     public Result getBattleResult(){
         Result result = new Result();
+        if(!isValid()){
+            result.invalid = true;
+            return result;
+        }
+
         SortByRank comparator = new SortByRank();
         Collections.sort(autobots, comparator);
         Collections.sort(decepticons, comparator);
@@ -129,7 +145,7 @@ public class Battle {
                     if(w.getTeam().equals(Transformer.TEAM_AUTOBOTS)) {
                         autobotsSurvivors.add(a);
                     } else {
-                        decepticonsSurvivors.add(a);
+                        decepticonsSurvivors.add(d);
                     }
                 }
             }

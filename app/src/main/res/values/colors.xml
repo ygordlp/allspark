@@ -7,5 +7,5 @@
     <color name="positive">#43B837</color>
     <color name="negative">#D94150</color>
     <color name="greyBg">#CCCCCC</color>
-    <color name="lightFont">#EEEEEE</color>
+    <color name="lightBg">#EEEEEE</color>
 </resources>

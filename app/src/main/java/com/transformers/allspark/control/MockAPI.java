@@ -44,7 +44,7 @@ public class MockAPI extends TransformersAPI {
                 t = allSpark.randomGenerate(Transformer.TEAM_DECEPTICONS);
             }
 
-            t.setId(Integer.toString(i));
+            t.setId(t.getName()+Integer.toString(i));
             transformers.add(t);
         }
     }
@@ -56,19 +56,18 @@ public class MockAPI extends TransformersAPI {
 
     @Override
     public Transformer getTransformer(String id) {
-        int i;
-        try {
-            i = Integer.parseInt(id);
-        } catch (Exception e) {
-            i = 0;
+        for(Transformer t : transformers){
+            if(t.getId().equals(id)){
+                return t;
+            }
         }
-        return transformers.get(i);
+        return null;
     }
 
     @Override
     public boolean addTransformer(Transformer transformer) {
         int id = transformers.size();
-        transformer.setId(Integer.toString(id));
+        transformer.setId(transformer.getName()+Integer.toString(id));
         transformers.add(transformer);
         notifyDataSetListeners();
         return true;
