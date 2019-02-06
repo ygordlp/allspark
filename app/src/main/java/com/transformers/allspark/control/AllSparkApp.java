@@ -15,12 +15,13 @@ import java.util.List;
  * Application class.
  * Holds application states and data.
  */
-public class AllSparkApp extends Application {
+public class AllSparkApp extends Application implements TransformersAPI.ApiListener {
 
     private static final String TAG = "AllSparkApp";
 
     public interface LoaderListener {
         void onLoadFinished();
+        void onLoadFail(String reason);
     }
 
     private AllSpark allSpark;
@@ -42,8 +43,8 @@ public class AllSparkApp extends Application {
         allSpark = AllSpark.getInstance(getResources().getStringArray(R.array.Autobots),
                 getResources().getStringArray(R.array.Decepticons));
 
-        //api = new TransformersAPI(this);
-        api = new MockAPI(this);
+        api = new TransformersAPI(this);
+        //api = new MockAPI(this);
     }
 
     /**
@@ -64,14 +65,30 @@ public class AllSparkApp extends Application {
         return allSpark;
     }
 
-    /**
-     * To be called when API is ready
-     */
+
+    @Override
     public void onApiReady() {
         Log.d(TAG, "API ready");
         new LoadTransformersTask().execute();
     }
 
+    @Override
+    public void onApiFailed(int reason) {
+        String strReason = "unknown";
+        switch (reason){
+            case TransformersAPI.REASON_TOKEN_FAIL:
+                strReason = getString(R.string.str_token_fail);
+                break;
+            case TransformersAPI.REASON_LOAD_FAIL:
+                strReason = getString(R.string.str_load_fail);
+                break;
+        }
+        listener.onLoadFail(strReason);
+    }
+
+    /**
+     * To be called when all Transformers were loaded.
+     */
     private void onTransformersLoaded(){
         listener.onLoadFinished();
     }

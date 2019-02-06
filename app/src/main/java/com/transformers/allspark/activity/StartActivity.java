@@ -1,8 +1,10 @@
 package com.transformers.allspark.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
@@ -60,5 +62,18 @@ public class StartActivity extends AppCompatActivity implements AllSparkApp.Load
         } else {
             goToMainActivity();
         }
+    }
+
+    @Override
+    public void onLoadFail(String reason) {
+        String failMessage = String.format(getString(R.string.str_server_fail), reason);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(failMessage)
+                .setPositiveButton(R.string.lbl_ok, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        finish();
+                    }
+                }).setCancelable(false);
+        builder.create().show();
     }
 }

@@ -29,7 +29,7 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class TransformersFragment extends Fragment implements OnItemSelectedListener, TransformersAPI.DataSetChangeListener {
+public class TransformersFragment extends Fragment implements OnItemSelectedListener {
 
     private static final String TAG = "TransformersFragment";
     private TransformersRecyclerViewAdapter adapter;
@@ -58,16 +58,19 @@ public class TransformersFragment extends Fragment implements OnItemSelectedList
 
         AllSparkApp app = (AllSparkApp) getActivity().getApplication();
         api = app.getTransformersAPI();
-        api.addDataSetChangeListener(this);
 
         recyclerView.setVisibility(View.INVISIBLE);
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
         progressBar.setVisibility(View.VISIBLE);
         message.setVisibility(View.INVISIBLE);
 
-        onDataSetChanged();
-
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        updateList();
     }
 
     @Override
@@ -79,14 +82,16 @@ public class TransformersFragment extends Fragment implements OnItemSelectedList
         startActivity(intent);
     }
 
-    @Override
-    public void onDataSetChanged() {
+    public void updateList() {
+        if(api == null){
+            return;
+        }
         List<Transformer> transformers = api.getAllTransformers();
         adapter.setTransformers(transformers);
         adapter.notifyDataSetChanged();
 
         progressBar.setVisibility(View.INVISIBLE);
-        if(transformers.isEmpty()){
+        if (transformers.isEmpty()) {
             Log.d(TAG, "No transformers found");
             message.setVisibility(View.VISIBLE);
         } else {

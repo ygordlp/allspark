@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.transformers.allspark">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:name=".control.AllSparkApp"
         android:allowBackup="true"
@@ -16,8 +18,7 @@
         <activity
             android:name=".activity.StartActivity"
             android:noHistory="true"
-            android:screenOrientation="portrait"
-            android:theme="@style/NoActionBar">
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

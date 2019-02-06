@@ -19,7 +19,7 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class BattleFragment extends Fragment implements TransformersAPI.DataSetChangeListener, View.OnClickListener {
+public class BattleFragment extends Fragment implements View.OnClickListener {
 
 
     private Battle battle;
@@ -38,7 +38,6 @@ public class BattleFragment extends Fragment implements TransformersAPI.DataSetC
 
         AllSparkApp app = (AllSparkApp) getActivity().getApplication();
         api = app.getTransformersAPI();
-        api.addDataSetChangeListener(this);
 
         battle = new Battle(api.getAllTransformers());
 
@@ -49,7 +48,8 @@ public class BattleFragment extends Fragment implements TransformersAPI.DataSetC
     }
 
     @Override
-    public void onDataSetChanged() {
+    public void onResume() {
+        super.onResume();
         battle = new Battle(api.getAllTransformers());
     }
 
@@ -65,7 +65,7 @@ public class BattleFragment extends Fragment implements TransformersAPI.DataSetC
         StringBuilder sb = new StringBuilder();
         String battle = (result.battleCount > 1)? getString(R.string.str_battles) : getString(R.string.str_battle);
         sb.append(String.format(battle, result.battleCount));
-        sb.append("\n");
+        sb.append("\n\n");
 
         if(result.allDestroyed) {
             sb.append(getString(R.string.str_all_destroyed));
@@ -74,7 +74,7 @@ public class BattleFragment extends Fragment implements TransformersAPI.DataSetC
         } else {
             String strWinners = getString(R.string.str_winners);
             sb.append(String.format(strWinners, result.winnerTeamName, toSingleString(result.winners)));
-            sb.append("\n");
+            sb.append("\n\n");
             String strSurvivors;
             if(result.survivors.size() > 0) {
                 strSurvivors = toSingleString(result.survivors);
