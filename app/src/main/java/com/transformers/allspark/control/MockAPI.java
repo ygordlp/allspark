@@ -29,8 +29,9 @@ public class MockAPI extends TransformersAPI {
     }
 
     @Override
-    public void loadTransformers() {
+    public boolean loadTransformers() {
         generateRandomTransformers();
+        return true;
     }
 
     /**
@@ -72,7 +73,7 @@ public class MockAPI extends TransformersAPI {
     public String addTransformer(Transformer transformer) {
         int id = transformers.size();
         transformer.setId(transformer.getName()+Integer.toString(id));
-        if (transformer.getTeam() == Transformer.TEAM_AUTOBOTS) {
+        if (transformer.getTeam().equals(Transformer.TEAM_AUTOBOTS)) {
             transformer.setTeam_icon(AUTOBOT_TEAM_ICON);
         } else {
             transformer.setTeam_icon(DECEPTICON_TEAM_ICON);

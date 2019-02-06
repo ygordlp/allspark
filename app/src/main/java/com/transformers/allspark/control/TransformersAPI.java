@@ -2,7 +2,6 @@ package com.transformers.allspark.control;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
@@ -36,11 +35,7 @@ public class TransformersAPI {
     private static final String HEADER_AUTHORIZATION = "Authorization";
     private static final String HEADER_BEARER = "Bearer ";
     private static final MediaType JSON_TYPE = MediaType.get("application/json; charset=utf-8");
-    public static  final int REASON_TOKEN_FAIL = 1;
-    public static  final int REASON_LOAD_FAIL = 2;
 
-    protected AllSparkApp allSparkApp;
-    protected ApiListener listener;
     protected List<Transformer> transformers = new ArrayList<>();
     private String token = null;
     private SharedPreferences sharedPreferences;
@@ -49,51 +44,64 @@ public class TransformersAPI {
 
 
     /**
-     * Interface for listener of Api events.
-     */
-    public interface ApiListener {
-        /**
-         * When api is ready for request.
-         */
-        void onApiReady();
-
-        /**
-         * When api fails.
-         */
-        void onApiFailed(int reason);
-    }
-
-    /**
      * TransformersAPI that contains all API interface to
      *
      * @param allSparkApp The AllSparkApp instance.
      */
     public TransformersAPI(@NonNull AllSparkApp allSparkApp) {
-        this.allSparkApp = allSparkApp;
-        this.listener = allSparkApp;
         this.sharedPreferences = allSparkApp.getSharedPreferences(SHARED_PREFERENCES, Context.MODE_PRIVATE);
-        init();
     }
 
     /**
      * Initialize API.
+     *
+     * @return True if initialized successfully.
      */
-    private void init() {
+    public boolean init() {
         String savedToken = sharedPreferences.getString(SAVED_TOKEN, null);
         if(savedToken == null){
-            TokenTask tokenTask = new TokenTask();
-            tokenTask.execute();
+            return requestToken();
         } else {
             token = savedToken;
-            allSparkApp.onApiReady();
+            return true;
         }
+    }
 
+    /**
+     * Requests and cache API token.
+     *
+     * @return True if token was created successfully.
+     */
+    private boolean requestToken(){
+        Request request = new Request.Builder()
+                .url(URL_TOKEN)
+                .build();
+
+        try {
+            Response response = http.newCall(request).execute();
+            String res = response.body().string();
+            if(res == null){
+                Log.e(TAG, "Null token received");
+                return false;
+            } else {
+                token = res;
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString(SAVED_TOKEN, token);
+                editor.apply();
+                return true;
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "An error occurred while retrieving token: " + e.getMessage());
+            return false;
+        }
     }
 
     /**
      * Loads and cache all save Transformers from database.
+     *
+     * @return True if loads with success.
      */
-    public void loadTransformers(){
+    public boolean loadTransformers(){
         Request request = new Request.Builder()
                 .url(URL_TRANSFORMERS)
                 .addHeader(HEADER_AUTHORIZATION, getBearer())
@@ -103,9 +111,10 @@ public class TransformersAPI {
             String body = response.body().string();
             Transformers transformersRequest = gson.fromJson(body, Transformers.class);
             transformers = transformersRequest.getTransformers();
+            return true;
         } catch (Exception e) {
-            listener.onApiFailed(REASON_LOAD_FAIL);
             Log.e(TAG, "An error occurred while loading transformers: " + e.getMessage());
+            return false;
         }
     }
 
@@ -194,41 +203,6 @@ public class TransformersAPI {
             }
         }
         return null;
-    }
-
-    /**
-     * Async task to request API Token.
-     */
-    public class TokenTask extends AsyncTask<Void, Void, String> {
-
-        @Override
-        protected String doInBackground(Void... params) {
-            Request request = new Request.Builder()
-                    .url(URL_TOKEN)
-                    .build();
-            String res = null;
-            try {
-                Response response = http.newCall(request).execute();
-                res = response.body().string();
-            } catch (Exception e) {
-                Log.e(TAG, "An error occurred while retrieving token: " + e.getMessage());
-            }
-
-            return res;
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            if(result == null){
-                listener.onApiFailed(REASON_TOKEN_FAIL);
-            } else {
-                token = result;
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putString(SAVED_TOKEN, token);
-                editor.apply();
-                listener.onApiReady();
-            }
-        }
     }
 
     /**
