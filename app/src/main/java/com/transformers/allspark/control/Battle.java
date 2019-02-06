@@ -80,7 +80,7 @@ public class Battle {
      * @param d Decepticon Transformer.
      * @return Winner Transformer, null if battle is a tie.
      */
-    private Transformer fight(Transformer a, Transformer d){
+    protected Transformer fight(Transformer a, Transformer d){
         Transformer winner;
 
         if((a.getCourage() - d.getCourage() >= 4) && (a.getStrength() - d.getStrength() >= 3)){
@@ -175,7 +175,7 @@ public class Battle {
      * @param transformers Transformers list.
      * @return List with all he names
      */
-    private List<String> getNamesFromList(List<Transformer> transformers){
+    protected List<String> getNamesFromList(List<Transformer> transformers){
         List<String> names = new ArrayList<>();
 
         for(Transformer t : transformers){
