@@ -13,6 +13,9 @@ import java.util.List;
  */
 public class MockAPI extends TransformersAPI {
 
+    private static final String AUTOBOT_TEAM_ICON = "file:///android_asset/ic_autobot.png";
+    private static final String DECEPTICON_TEAM_ICON = "file:///android_asset/ic_decepticon.png";
+
     private AllSpark allSpark;
 
     /**
@@ -39,10 +42,10 @@ public class MockAPI extends TransformersAPI {
         for (int i = 0; i < 10; i++) {
             if (i % 2 == 0) {
                 t = allSpark.randomGenerate(Transformer.TEAM_AUTOBOTS);
-                t.setTeam_icon("file:///android_asset/ic_autobots.png");
+                t.setTeam_icon(AUTOBOT_TEAM_ICON);
             } else {
                 t = allSpark.randomGenerate(Transformer.TEAM_DECEPTICONS);
-                t.setTeam_icon("file:///android_asset/ic_decepticons.png");
+                t.setTeam_icon(DECEPTICON_TEAM_ICON);
             }
 
             t.setId(t.getName()+Integer.toString(i));
@@ -69,6 +72,11 @@ public class MockAPI extends TransformersAPI {
     public String addTransformer(Transformer transformer) {
         int id = transformers.size();
         transformer.setId(transformer.getName()+Integer.toString(id));
+        if (transformer.getTeam() == Transformer.TEAM_AUTOBOTS) {
+            transformer.setTeam_icon(AUTOBOT_TEAM_ICON);
+        } else {
+            transformer.setTeam_icon(DECEPTICON_TEAM_ICON);
+        }
         transformers.add(transformer);
         return transformer.getId();
     }

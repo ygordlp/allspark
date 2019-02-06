@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.transformers.allspark.BuildConfig;
 import com.transformers.allspark.R;
 import com.transformers.allspark.model.Transformer;
 import com.transformers.allspark.util.AllSpark;
@@ -43,8 +44,12 @@ public class AllSparkApp extends Application implements TransformersAPI.ApiListe
         allSpark = AllSpark.getInstance(getResources().getStringArray(R.array.Autobots),
                 getResources().getStringArray(R.array.Decepticons));
 
-        api = new TransformersAPI(this);
-        //api = new MockAPI(this);
+        Log.d(TAG, "Use mock: " + BuildConfig.MOCK);
+        if(BuildConfig.MOCK) {
+            api = new MockAPI(this);
+        } else {
+            api = new TransformersAPI(this);
+        }
     }
 
     /**
